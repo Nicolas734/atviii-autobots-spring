@@ -56,7 +56,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		telefoneEmpresa.setNumero("986454527");
 
 		empresa.getTelefones().add(telefoneEmpresa);
-
+		
 		Usuario funcionario = new Usuario();
 		funcionario.setNome("Pedro Alcântara de Bragança e Bourbon");
 		funcionario.setNomeSocial("Dom Pedro");
@@ -78,7 +78,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		funcionario.setEndereco(enderecoFuncionario);
 
 		empresa.getUsuarios().add(funcionario);
-
+		
 		Telefone telefoneFuncionario = new Telefone();
 		telefoneFuncionario.setDdd("011");
 		telefoneFuncionario.setNumero("9854633728");
@@ -100,7 +100,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		credencialFuncionario.setUltimoAcesso(new Date());
 
 		funcionario.getCredenciais().add(credencialFuncionario);
-
+		
 		Usuario fornecedor = new Usuario();
 		fornecedor.setNome("Componentes varejo de partes automotivas ltda");
 		fornecedor.setNomeSocial("Loja do carro, vendas de componentes automotivos");
@@ -149,7 +149,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		rodaLigaLeve.setDescricao("Roda de liga leve original de fábrica da toyta para modelos do tipo hatch");
 
 		empresa.getMercadorias().add(rodaLigaLeve);
-
+		
 		fornecedor.getMercadorias().add(rodaLigaLeve);
 
 		Usuario cliente = new Usuario();
@@ -161,7 +161,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		emailCliente.setEndereco("c@c.com");
 
 		cliente.getEmails().add(emailCliente);
-
+		
 		Documento cpfCliente = new Documento();
 		cpfCliente.setDataEmissao(new Date());
 		cpfCliente.setNumero("12584698533");
@@ -177,7 +177,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		credencialCliente.setUltimoAcesso(new Date());
 
 		cliente.getCredenciais().add(credencialCliente);
-
+		
 		Endereco enderecoCliente = new Endereco();
 		enderecoCliente.setEstado("São Paulo");
 		enderecoCliente.setCidade("São José dos Campos");
@@ -196,8 +196,8 @@ public class AutomanagerApplication implements CommandLineRunner {
 		
 		cliente.getVeiculos().add(veiculo);
 		
-		empresa.getUsuarios().add(cliente);
-
+		//empresa.getUsuarios().add(cliente);	// ERRO
+		
 		Servico trocaRodas = new Servico();
 		trocaRodas.setDescricao("Troca das rodas do carro por novas");
 		trocaRodas.setNome("Troca de rodas");
@@ -210,7 +210,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 
 		empresa.getServicos().add(trocaRodas);
 		empresa.getServicos().add(alinhamento);
-
+		
 		Venda venda = new Venda();
 		venda.setCadastro(new Date());
 		venda.setCliente(cliente);
@@ -222,7 +222,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		venda.setVeiculo(veiculo);
 		veiculo.getVendas().add(venda);
 
-		empresa.getVendas().add(venda);
+		//empresa.getVendas().add(venda);	// ERRO
 
 		repositorioEmpresa.save(empresa);
 

@@ -35,4 +35,41 @@ public class Veiculo {
 	private Usuario proprietario;
 	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	private Set<Venda> vendas = new HashSet<>();
+
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public TipoVeiculo getTipo() {
+		return tipo;
+	}
+	public void setTipo(TipoVeiculo tipo) {
+		this.tipo = tipo;
+	}
+	public String getModelo() {
+		return modelo;
+	}
+	public void setModelo(String modelo) {
+		this.modelo = modelo;
+	}
+	public String getPlaca() {
+		return placa;
+	}
+	public void setPlaca(String placa) {
+		this.placa = placa;
+	}
+	public Usuario getProprietario() {
+		return proprietario;
+	}
+	public void setProprietario(Usuario proprietario) {
+		this.proprietario = proprietario;
+	}
+	public Set<Venda> getVendas() {
+		return vendas;
+	}
+	public void setVendas(Set<Venda> vendas) {
+		this.vendas = vendas;
+	}
 }

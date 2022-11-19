@@ -48,4 +48,77 @@ public class Usuario {
 	private Set<Venda> vendas = new HashSet<>();
 	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<Veiculo> veiculos = new HashSet<>();
+
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	public String getNomeSocial() {
+		return nomeSocial;
+	}
+	public void setNomeSocial(String nomeSocial) {
+		this.nomeSocial = nomeSocial;
+	}
+	public Set<PerfilUsuario> getPerfis() {
+		return perfis;
+	}
+	public void setPerfis(Set<PerfilUsuario> perfis) {
+		this.perfis = perfis;
+	}
+	public Set<Telefone> getTelefones() {
+		return telefones;
+	}
+	public void setTelefones(Set<Telefone> telefones) {
+		this.telefones = telefones;
+	}
+	public Endereco getEndereco() {
+		return endereco;
+	}
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+	public Set<Documento> getDocumentos() {
+		return documentos;
+	}
+	public void setDocumentos(Set<Documento> documentos) {
+		this.documentos = documentos;
+	}
+	public Set<Email> getEmails() {
+		return emails;
+	}
+	public void setEmails(Set<Email> emails) {
+		this.emails = emails;
+	}
+	public Set<Credencial> getCredenciais() {
+		return credenciais;
+	}
+	public void setCredenciais(Set<Credencial> credenciais) {
+		this.credenciais = credenciais;
+	}
+	public Set<Mercadoria> getMercadorias() {
+		return mercadorias;
+	}
+	public void setMercadorias(Set<Mercadoria> mercadorias) {
+		this.mercadorias = mercadorias;
+	}
+	public Set<Venda> getVendas() {
+		return vendas;
+	}
+	public void setVendas(Set<Venda> vendas) {
+		this.vendas = vendas;
+	}
+	public Set<Veiculo> getVeiculos() {
+		return veiculos;
+	}
+	public void setVeiculos(Set<Veiculo> veiculos) {
+		this.veiculos = veiculos;
+	}
 }
