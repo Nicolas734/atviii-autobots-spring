@@ -16,11 +16,11 @@ public class Mercadoria {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private Date validade;
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private Date fabricao;
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private Date cadastro;
 	@Column(nullable = false)
 	private String nome;

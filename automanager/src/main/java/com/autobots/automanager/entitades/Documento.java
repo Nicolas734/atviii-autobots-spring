@@ -20,7 +20,7 @@ public class Documento {
 	private Long id;
 	@Column(nullable = false)
 	private TipoDocumento tipo;
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private Date dataEmissao;
 	@Column(unique = true, nullable = false)
 	private String numero;
