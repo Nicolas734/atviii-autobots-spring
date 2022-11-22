@@ -1,4 +1,4 @@
-package com.autobots.automanager.controle;
+package com.autobots.automanager.controles;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.autobots.automanager.entitades.Email;
+import com.autobots.automanager.entidades.Email;
 import com.autobots.automanager.repositorios.RepositorioEmail;
 
 @RestController

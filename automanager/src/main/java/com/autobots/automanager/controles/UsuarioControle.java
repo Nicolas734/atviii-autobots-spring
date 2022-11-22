@@ -1,4 +1,4 @@
-package com.autobots.automanager.controle;
+package com.autobots.automanager.controles;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.autobots.automanager.entitades.Usuario;
+import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
 
 @RestController

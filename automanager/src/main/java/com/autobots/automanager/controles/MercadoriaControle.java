@@ -1,4 +1,4 @@
-package com.autobots.automanager.controle;
+package com.autobots.automanager.controles;
 
 import java.util.Date;
 import java.util.List;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.autobots.automanager.entitades.Empresa;
-import com.autobots.automanager.entitades.Mercadoria;
+import com.autobots.automanager.entidades.Empresa;
+import com.autobots.automanager.entidades.Mercadoria;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 import com.autobots.automanager.repositorios.RepositorioMercadoria;
 

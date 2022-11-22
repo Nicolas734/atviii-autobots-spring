@@ -1,4 +1,4 @@
-package com.autobots.automanager.entitades;
+package com.autobots.automanager.entidades;
 
 import java.util.Date;
 import java.util.HashSet;
