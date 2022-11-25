@@ -1,5 +1,6 @@
 package com.autobots.automanager.controles;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +8,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autobots.automanager.entidades.Empresa;
+import com.autobots.automanager.entidades.Mercadoria;
+import com.autobots.automanager.entidades.Servico;
+import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.entidades.Venda;
+import com.autobots.automanager.modelos.VendaMolde;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
+import com.autobots.automanager.repositorios.RepositorioMercadoria;
+import com.autobots.automanager.repositorios.RepositorioServico;
+import com.autobots.automanager.repositorios.RepositorioUsuario;
+import com.autobots.automanager.repositorios.RepositorioVeiculo;
 import com.autobots.automanager.repositorios.RepositorioVenda;
 
 @RestController
@@ -22,6 +34,14 @@ public class VendaControle {
 	public RepositorioVenda repositorio;
 	@Autowired
 	public RepositorioEmpresa repositorioEmpresa;
+	@Autowired
+	public RepositorioUsuario repositorioUsuario;
+	@Autowired
+	public RepositorioMercadoria repositorioMercadoria;
+	@Autowired
+	public RepositorioServico repositorioServico;
+	@Autowired
+	public RepositorioVeiculo repositorioVeiculo;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Venda>> buscarVendas(){
@@ -41,5 +61,59 @@ public class VendaControle {
 		return new ResponseEntity<Venda>(venda, status);
 	}
 	
+	@PostMapping("/cadastrar")
+	public ResponseEntity<Empresa> cadastrarVenda(@RequestBody VendaMolde dados){
+		Empresa empresa = repositorioEmpresa.findById(dados.getIdEmpresa()).orElse(null);
+		Venda venda = new Venda();
+		if(empresa == null) {
+			return new ResponseEntity<Empresa>(empresa,HttpStatus.NOT_FOUND);
+		}else {
+			venda.setCliente(repositorioUsuario.findById(dados.getIdCliente()).orElse(null));
+			venda.setFuncionario(repositorioUsuario.findById(dados.getIdCliente()).orElse(null));
+			
+			if(dados.getIdMercadorias() != null) {
+				if(dados.getIdMercadorias().size() > 0) {					
+					for(Long id: dados.getIdMercadorias()) {
+						Mercadoria respostaBuscar = repositorioMercadoria.findById(id).orElse(null);
+						Mercadoria mercadoria = new Mercadoria();
+						mercadoria.setValidade(respostaBuscar.getValidade());
+						mercadoria.setFabricao(respostaBuscar.getFabricao());
+						mercadoria.setCadastro(respostaBuscar.getCadastro());
+						mercadoria.setNome(respostaBuscar.getNome());
+						mercadoria.setQuantidade(respostaBuscar.getQuantidade());
+						mercadoria.setValor(respostaBuscar.getValor());
+						mercadoria.setDescricao(respostaBuscar.getDescricao());
+						mercadoria.setOriginal(false);
+						venda.getMercadorias().add(mercadoria);
+					}
+				}
+			}
+			
+			if(dados.getIdServicos() != null) {
+				if(dados.getIdServicos().size() > 0) {
+					for(Long id: dados.getIdServicos()) {
+						Servico respostaBusca = repositorioServico.findById(id).orElse(null);
+						Servico servico = new Servico();
+						servico.setNome(respostaBusca.getNome());
+						servico.setDescricao(respostaBusca.getDescricao());
+						servico.setValor(respostaBusca.getValor());
+						venda.getServicos().add(servico);
+					}	
+				}
+			}
+			
+			venda.setVeiculo(repositorioVeiculo.findById(dados.getIdVeiculo()).orElse(null));
+			venda.setCadastro(new Date());
+			venda.setIdentificacao(dados.getIdentificacao());
+			empresa.getVendas().add(venda);
+			Usuario cliente = venda.getCliente();
+			Usuario funcionario = venda.getFuncionario();
+			cliente.getVendas().add(venda);
+			funcionario.getVendas().add(venda);
+			
+			repositorioEmpresa.save(empresa);
+			return new ResponseEntity<Empresa>(empresa,HttpStatus.CREATED);
+		}
+	}
 	
 }

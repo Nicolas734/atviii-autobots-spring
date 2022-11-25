@@ -47,6 +47,7 @@ public class MercadoriaControle {
 	
 	@PostMapping("/cadastrar/{idEmpresa}")
 	public ResponseEntity<Empresa> cadastrarMercadoriaEmpresa(@RequestBody Mercadoria dados, @PathVariable Long idEmpresa){
+		dados.setOriginal(true);
 		Empresa empresa = repositorioEmpresa.findById(idEmpresa).orElse(null);
 		dados.setCadastro(new Date());
 		HttpStatus status = null;

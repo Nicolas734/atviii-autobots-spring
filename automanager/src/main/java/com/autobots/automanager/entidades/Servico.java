@@ -7,19 +7,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode
 @Data
 @Entity
 public class Servico {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String nome;
 	@Column(nullable = false)
 	private double valor;
 	@Column
 	private String descricao;
+	@Column
+	private Boolean original;
 	
 	public Long getId() {
 		return id;
@@ -44,5 +48,11 @@ public class Servico {
 	}
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	public Boolean getOriginal() {
+		return this.original;
+	}
+	public void setOriginal(Boolean original) {
+		this.original = original;
 	}
 }

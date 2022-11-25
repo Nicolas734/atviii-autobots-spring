@@ -56,7 +56,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		telefoneEmpresa.setNumero("986454527");
 
 		empresa.getTelefones().add(telefoneEmpresa);
-		
+
 		Usuario funcionario = new Usuario();
 		funcionario.setNome("Pedro Alcântara de Bragança e Bourbon");
 		funcionario.setNomeSocial("Dom Pedro");
@@ -78,7 +78,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		funcionario.setEndereco(enderecoFuncionario);
 
 		empresa.getUsuarios().add(funcionario);
-		
+
 		Telefone telefoneFuncionario = new Telefone();
 		telefoneFuncionario.setDdd("011");
 		telefoneFuncionario.setNumero("9854633728");
@@ -100,7 +100,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		credencialFuncionario.setUltimoAcesso(new Date());
 
 		funcionario.getCredenciais().add(credencialFuncionario);
-		
+
 		Usuario fornecedor = new Usuario();
 		fornecedor.setNome("Componentes varejo de partes automotivas ltda");
 		fornecedor.setNomeSocial("Loja do carro, vendas de componentes automotivos");
@@ -147,9 +147,10 @@ public class AutomanagerApplication implements CommandLineRunner {
 		rodaLigaLeve.setQuantidade(30);
 		rodaLigaLeve.setValor(300.0);
 		rodaLigaLeve.setDescricao("Roda de liga leve original de fábrica da toyta para modelos do tipo hatch");
+		rodaLigaLeve.setOriginal(true);
 
 		empresa.getMercadorias().add(rodaLigaLeve);
-		
+
 		fornecedor.getMercadorias().add(rodaLigaLeve);
 
 		Usuario cliente = new Usuario();
@@ -161,7 +162,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		emailCliente.setEndereco("c@c.com");
 
 		cliente.getEmails().add(emailCliente);
-		
+
 		Documento cpfCliente = new Documento();
 		cpfCliente.setDataEmissao(new Date());
 		cpfCliente.setNumero("12584698533");
@@ -177,7 +178,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		credencialCliente.setUltimoAcesso(new Date());
 
 		cliente.getCredenciais().add(credencialCliente);
-		
+
 		Endereco enderecoCliente = new Endereco();
 		enderecoCliente.setEstado("São Paulo");
 		enderecoCliente.setCidade("São José dos Campos");
@@ -196,21 +197,23 @@ public class AutomanagerApplication implements CommandLineRunner {
 		
 		cliente.getVeiculos().add(veiculo);
 		
-		//empresa.getUsuarios().add(cliente);	// ERRO
-		
+		empresa.getUsuarios().add(cliente);
+
 		Servico trocaRodas = new Servico();
 		trocaRodas.setDescricao("Troca das rodas do carro por novas");
 		trocaRodas.setNome("Troca de rodas");
 		trocaRodas.setValor(50);
+		trocaRodas.setOriginal(true);
 
 		Servico alinhamento = new Servico();
 		alinhamento.setDescricao("Alinhamento das rodas do carro");
 		alinhamento.setNome("Alinhamento de rodas");
 		alinhamento.setValor(50);
+		alinhamento.setOriginal(true);
 
 		empresa.getServicos().add(trocaRodas);
 		empresa.getServicos().add(alinhamento);
-		
+
 		Venda venda = new Venda();
 		venda.setCadastro(new Date());
 		venda.setCliente(cliente);
@@ -222,9 +225,43 @@ public class AutomanagerApplication implements CommandLineRunner {
 		venda.setVeiculo(veiculo);
 		veiculo.getVendas().add(venda);
 
-		//empresa.getVendas().add(venda);	// ERRO
+		empresa.getVendas().add(venda);
 
 		repositorioEmpresa.save(empresa);
+		
+		Mercadoria rodaLigaLeve2 = new Mercadoria();
+		rodaLigaLeve2.setCadastro(new Date());
+		rodaLigaLeve2.setFabricao(new Date());
+		rodaLigaLeve2.setNome("Roda de liga pesada modelo toyota yaris");
+		rodaLigaLeve2.setValidade(new Date());
+		rodaLigaLeve2.setQuantidade(30);
+		rodaLigaLeve2.setValor(300.0);
+		rodaLigaLeve2.setDescricao("Roda de liga pesada original de fábrica da toyta para modelos do tipo hatch");
+		rodaLigaLeve2.setOriginal(true);
+		
+		Servico alinhamento2 = new Servico();
+		alinhamento2.setDescricao("Alinhamento das rodas do carro");
+		alinhamento2.setNome("Alinhamento de rodas");
+		alinhamento2.setValor(50);
+		
+		Servico balanceamento = new Servico();
+		balanceamento.setDescricao("balanceamento das rodas do carro");
+		balanceamento.setNome("balanceamento de rodas");
+		balanceamento.setValor(30);
+		
+		Venda venda2 = new Venda();
+		venda2.setCadastro(new Date());
+		venda2.setCliente(cliente);
+		venda2.getMercadorias().add(rodaLigaLeve2);
+		venda2.setIdentificacao("1234698749");
+		venda2.setFuncionario(funcionario);
+		venda2.getServicos().add(balanceamento);
+		venda2.getServicos().add(alinhamento2);
+		venda2.setVeiculo(veiculo);
+		veiculo.getVendas().add(venda2);
 
+		empresa.getVendas().add(venda2);
+		
+		repositorioEmpresa.save(empresa);
 	}
 }

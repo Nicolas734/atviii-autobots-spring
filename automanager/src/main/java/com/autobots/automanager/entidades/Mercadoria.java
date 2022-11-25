@@ -30,6 +30,8 @@ public class Mercadoria {
 	private double valor;
 	@Column()
 	private String descricao;
+	@Column()
+	private Boolean original;
 
 	public Long getId() {
 		return id;
@@ -79,4 +81,11 @@ public class Mercadoria {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+	public Boolean getOriginal() {
+		return this.original;
+	}
+	public void setOriginal(Boolean original) {
+		this.original = original;
+	}
+	
 }
