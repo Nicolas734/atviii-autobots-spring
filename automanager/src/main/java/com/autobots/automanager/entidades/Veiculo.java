@@ -23,7 +23,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(exclude = { "proprietario", "vendas" })
 @Entity
-@JsonIgnoreProperties
 public class Veiculo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +34,10 @@ public class Veiculo {
 	@Column(nullable = false)
 	private String placa;
 	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
-	@JsonBackReference
+	@JsonIgnoreProperties(value = {"veiculos", "endereco", "mercadorias", "vendas"})
 	private Usuario proprietario;
 	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
-	@JsonBackReference
+	@JsonIgnoreProperties(value = {"veiculos", "endereco", "mercadorias", "vendas"})
 	private Set<Venda> vendas = new HashSet<>();
 
 	public Long getId() {

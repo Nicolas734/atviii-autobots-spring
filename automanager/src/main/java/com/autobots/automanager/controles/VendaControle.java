@@ -69,7 +69,7 @@ public class VendaControle {
 			return new ResponseEntity<Empresa>(empresa,HttpStatus.NOT_FOUND);
 		}else {
 			venda.setCliente(repositorioUsuario.findById(dados.getIdCliente()).orElse(null));
-			venda.setFuncionario(repositorioUsuario.findById(dados.getIdCliente()).orElse(null));
+			venda.setFuncionario(repositorioUsuario.findById(dados.getIdFuncionario()).orElse(null));
 			
 			if(dados.getIdMercadorias() != null) {
 				if(dados.getIdMercadorias().size() > 0) {					
@@ -97,6 +97,7 @@ public class VendaControle {
 						servico.setNome(respostaBusca.getNome());
 						servico.setDescricao(respostaBusca.getDescricao());
 						servico.setValor(respostaBusca.getValor());
+						servico.setOriginal(false);
 						venda.getServicos().add(servico);
 					}	
 				}
@@ -106,12 +107,11 @@ public class VendaControle {
 			venda.setCadastro(new Date());
 			venda.setIdentificacao(dados.getIdentificacao());
 			empresa.getVendas().add(venda);
-			Usuario cliente = venda.getCliente();
 			Usuario funcionario = venda.getFuncionario();
-			cliente.getVendas().add(venda);
-			funcionario.getVendas().add(venda);
 			
+			funcionario.getVendas().add(venda);
 			repositorioEmpresa.save(empresa);
+			
 			return new ResponseEntity<Empresa>(empresa,HttpStatus.CREATED);
 		}
 	}
