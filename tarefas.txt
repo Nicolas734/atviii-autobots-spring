@@ -35,3 +35,7 @@ ao remover algo de uma entidade pai ela automaticamente é excluida ?
 CORREÇÕES
 
 verificar excluir mercadoria, venda, serviço e usuario
+
+mercadoria ok
+servico problema ao excluir o id 3
+usuario problema ao excluir usuario criado pela rota post
