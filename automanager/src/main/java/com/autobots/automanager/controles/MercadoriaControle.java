@@ -1,7 +1,6 @@
 package com.autobots.automanager.controles;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import com.autobots.automanager.entidades.Empresa;
 import com.autobots.automanager.entidades.Mercadoria;
 import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.entidades.Venda;
-import com.autobots.automanager.modelos.MercadoriaExcluirAtualizarMolde;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 import com.autobots.automanager.repositorios.RepositorioMercadoria;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
@@ -118,7 +116,7 @@ public class MercadoriaControle {
 		}
 
 		repositorio.deleteById(idMercadoria);
-		return new ResponseEntity<>(empresas,HttpStatus.ACCEPTED);
+		return new ResponseEntity<>("Mercadoria excluida com sucesso...",HttpStatus.ACCEPTED);
 	}
 
 }

@@ -15,8 +15,8 @@ Documento					Get:Ok, Post:Ok
 Email						Get:Ok, Post:Ok
 Empresa						Get:Ok, Post:Ok
 Endereco					Get:Ok, Post:Ok
-Mercadoria					Get:Ok, Post:Ok
-Servico						Get:Ok, Post:Ok
+Mercadoria					Get:Ok, Post:Ok, Delete:Ok
+Servico						Get:Ok, Post:Ok, Delete:Ok
 Telefone					Get:Ok, Post:Ok
 Usuario						Get:Ok, Post:Ok
 Veiculo						Get:Ok, Post:Ok
