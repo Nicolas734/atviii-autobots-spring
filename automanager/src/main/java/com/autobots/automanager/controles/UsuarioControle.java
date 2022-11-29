@@ -1,6 +1,7 @@
 package com.autobots.automanager.controles;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,11 +15,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autobots.automanager.entidades.Credencial;
+import com.autobots.automanager.entidades.Documento;
+import com.autobots.automanager.entidades.Email;
 import com.autobots.automanager.entidades.Empresa;
+import com.autobots.automanager.entidades.Mercadoria;
+import com.autobots.automanager.entidades.Telefone;
 import com.autobots.automanager.entidades.Usuario;
+import com.autobots.automanager.entidades.Veiculo;
+import com.autobots.automanager.entidades.Venda;
 import com.autobots.automanager.enumeracoes.PerfilUsuario;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
+import com.autobots.automanager.repositorios.RepositorioVeiculo;
+import com.autobots.automanager.repositorios.RepositorioVenda;
 
 @RestController
 @RequestMapping("/usuario")
@@ -28,6 +38,10 @@ public class UsuarioControle {
 	private RepositorioUsuario repositorio;
 	@Autowired
 	private RepositorioEmpresa repositorioEmpresa;
+	@Autowired
+	private RepositorioVenda repositorioVenda;
+	@Autowired
+	private RepositorioVeiculo repositorioVeiculo;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Usuario>> buscarUsuarios(){
@@ -75,14 +89,48 @@ public class UsuarioControle {
 	
 	//@PutMapping("/atualizar/{idUsuario}")
 	
-	@DeleteMapping("/excluir/{idUsuario}")
+	/*@DeleteMapping("/excluir/{idUsuario}")
 	public ResponseEntity<?> excluirCliente(@PathVariable Long idUsuario){
 		Usuario usuario = repositorio.findById(idUsuario).orElse(null);
 		if(usuario == null) {
 			return new ResponseEntity<String>("Usuario não encontrado",HttpStatus.NOT_FOUND);
 		}else {
+			Set<Documento> documentos = usuario.getDocumentos();
+			Set<Telefone> telefones = usuario.getTelefones();
+			Set<Email> emails = usuario.getEmails();
+			Set<Credencial> credenciais = usuario.getCredenciais();
+			Set<Mercadoria> mercadorias = usuario.getMercadorias();
+			Set<Venda> vendas = usuario.getVendas();
+			Set<Veiculo> veiculos = usuario.getVeiculos();
+			if(vendas.size() > 0) {
+				for(Venda vendaRegistrada: repositorioVenda.findAll()) {
+					if(vendaRegistrada.getCliente().getId() == idUsuario) {
+						vendaRegistrada.setCliente(null);
+					}
+					if(vendaRegistrada.getFuncionario().getId() == idUsuario) {
+						vendaRegistrada.setFuncionario(null);
+					}
+				}
+			}
+			if(veiculos.size() > 0) {
+				for(Veiculo veiculoRegistrado: repositorioVeiculo.findAll()) {
+					if(veiculoRegistrado.getProprietario().getId() == idUsuario) {
+						veiculoRegistrado.setProprietario(null);
+					}
+				}
+			}
+			
+			usuario.getDocumentos().removeAll(documentos);
+			usuario.getTelefones().removeAll(telefones);
+			usuario.getEmails().removeAll(emails);
+			usuario.getCredenciais().removeAll(credenciais);
+			usuario.getMercadorias().removeAll(mercadorias);
+			usuario.getVeiculos().removeAll(veiculos);
+			usuario.getVendas().removeAll(vendas);
+			usuario.setEndereco(null);
+
 			repositorio.delete(usuario);
 			return new ResponseEntity<String>("Usuario excluido com sucesso",HttpStatus.ACCEPTED);
 		}
-	}
+	}*/
 }

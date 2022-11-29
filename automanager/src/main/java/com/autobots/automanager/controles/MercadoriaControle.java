@@ -1,11 +1,13 @@
 package com.autobots.automanager.controles;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entidades.Empresa;
 import com.autobots.automanager.entidades.Mercadoria;
+import com.autobots.automanager.entidades.Usuario;
+import com.autobots.automanager.entidades.Venda;
+import com.autobots.automanager.modelos.MercadoriaExcluirAtualizarMolde;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 import com.autobots.automanager.repositorios.RepositorioMercadoria;
+import com.autobots.automanager.repositorios.RepositorioUsuario;
+import com.autobots.automanager.repositorios.RepositorioVenda;
 
 @RestController
 @RequestMapping("/mercadoria")
@@ -26,6 +33,10 @@ public class MercadoriaControle {
 	private RepositorioMercadoria repositorio;
 	@Autowired
 	private RepositorioEmpresa repositorioEmpresa;
+	@Autowired
+	private RepositorioUsuario repositorioUsuario;
+	@Autowired
+	private RepositorioVenda repositorioVenda;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Mercadoria>> buscarMercadorias(){
@@ -59,6 +70,55 @@ public class MercadoriaControle {
 			status = HttpStatus.CREATED;
 		}
 		return new ResponseEntity<Empresa>(empresa,status);
+	}
+	
+	@DeleteMapping("/excluir/{idMercadoria}")
+	public ResponseEntity<?> excluirMercadoriaEmpresa(@PathVariable Long idMercadoria){
+		List<Empresa> empresas = repositorioEmpresa.findAll();
+		List<Usuario> usuarios = repositorioUsuario.findAll();
+		List<Venda> vendas = repositorioVenda.findAll();
+		
+		//empresa
+		for(Empresa empresa: repositorioEmpresa.findAll()) {
+			if(empresa.getMercadorias().size() > 0) {
+				for(Mercadoria mercadoriaEmpresa: empresa.getMercadorias()) {
+					if(mercadoriaEmpresa.getId() == idMercadoria) {
+						for(Empresa empresaRegistrada: empresas) {
+							empresaRegistrada.getMercadorias().remove(mercadoriaEmpresa);
+						}
+					}
+				}
+			}
+		}
+		
+		//usuario
+		for(Usuario usuario: repositorioUsuario.findAll()) {
+			if(usuario.getMercadorias().size() > 0) {
+				for(Mercadoria mercadoriaUsuario:usuario.getMercadorias()) {
+					if(mercadoriaUsuario.getId() == idMercadoria) {
+						for(Usuario usuarioRegistrado: usuarios) {
+							usuarioRegistrado.getMercadorias().remove(mercadoriaUsuario);
+						}
+					}
+				}
+			}
+		}
+		
+		//venda
+		for(Venda venda: repositorioVenda.findAll()) {
+			if(venda.getMercadorias().size() > 0) {
+				for(Mercadoria mercadoriaVenda: venda.getMercadorias()) {
+					if(mercadoriaVenda.getId() == idMercadoria) {
+						for(Venda vendaRegistrada:vendas) {
+							vendaRegistrada.getMercadorias().remove(mercadoriaVenda);
+						}
+					}
+				}
+			}
+		}
+
+		repositorio.deleteById(idMercadoria);
+		return new ResponseEntity<>(empresas,HttpStatus.ACCEPTED);
 	}
 
 }
