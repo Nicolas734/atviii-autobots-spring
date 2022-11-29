@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import com.autobots.automanager.entidades.Empresa;
 import com.autobots.automanager.entidades.Mercadoria;
 import com.autobots.automanager.entidades.Servico;
 import com.autobots.automanager.entidades.Usuario;
+import com.autobots.automanager.entidades.Veiculo;
 import com.autobots.automanager.entidades.Venda;
 import com.autobots.automanager.modelos.VendaMolde;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
@@ -114,6 +116,63 @@ public class VendaControle {
 			
 			return new ResponseEntity<Empresa>(empresa,HttpStatus.CREATED);
 		}
+	}
+	
+	@DeleteMapping("/excluir/{idVenda}")
+	public ResponseEntity<?> excluirVenda(@PathVariable Long idVenda){
+		List<Empresa> empresas = repositorioEmpresa.findAll();
+		List<Usuario> usuarios = repositorioUsuario.findAll();
+		List<Veiculo> veiculos = repositorioVeiculo.findAll();
+		Venda verificador = repositorio.findById(idVenda).orElse(null);
+		
+		if(verificador == null) {
+			return new ResponseEntity<>("Venda não encontrada...", HttpStatus.NOT_FOUND);
+		}else {
+
+			//empresa
+			for(Empresa empresa: repositorioEmpresa.findAll()) {
+				if(empresa.getVendas().size() > 0) {
+					for(Venda vendaEmpresa: empresa.getVendas()) {
+						if(vendaEmpresa.getId() == idVenda) {
+							for(Empresa empresaRegistrada: empresas) {
+								empresaRegistrada.getVendas().remove(vendaEmpresa);
+							}
+						}
+					}
+				}
+			}
+			
+			//usuarios
+			for(Usuario usuario: repositorioUsuario.findAll()) {
+				if(usuario.getVendas().size() > 0) {
+					for(Venda vendaUsuario: usuario.getVendas()) {
+						if(vendaUsuario.getId() == idVenda) {
+							for(Usuario usuarioRegistrado: usuarios) {
+								usuarioRegistrado.getVendas().remove(vendaUsuario);
+							}
+						}
+					}
+				}
+			}
+			
+			//veiculos
+			for(Veiculo veiculo: repositorioVeiculo.findAll()) {
+				if(veiculo.getVendas().size() > 0) {
+					for(Venda vendaVeiculo: veiculo.getVendas()) {
+						if(vendaVeiculo.getId() == idVenda) {
+							for(Veiculo veiculoRegistrado: veiculos) {
+								veiculoRegistrado.getVendas().remove(vendaVeiculo);
+							}
+						}
+					}
+				}
+			}
+			
+			repositorio.deleteById(idVenda);
+			return new ResponseEntity<>(veiculos, HttpStatus.ACCEPTED);
+		}
+		
+		
 	}
 	
 }

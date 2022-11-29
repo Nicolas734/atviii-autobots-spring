@@ -20,7 +20,7 @@ Servico						Get:Ok, Post:Ok, Delete:Ok
 Telefone					Get:Ok, Post:Ok
 Usuario						Get:Ok, Post:Ok
 Veiculo						Get:Ok, Post:Ok
-Venda						Get:Ok, Post:Ok
+Venda						Get:Ok, Post:Ok, Delete:Ok
 
 
 
@@ -30,3 +30,8 @@ DUVIDAS
 as mercadorias estão associadas a empresa e ao fornecedor ?
 
 ao remover algo de uma entidade pai ela automaticamente é excluida ?
+
+
+CORREÇÕES
+
+verificar excluir mercadoria, venda, serviço e usuario
