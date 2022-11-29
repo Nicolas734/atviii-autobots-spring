@@ -45,7 +45,7 @@ public class ServicoControle {
 	}
 	
 	@PostMapping("/cadastrar/{idEmpresa}")
-	public ResponseEntity<Empresa> cadastrarServico(@RequestBody Servico dados, @PathVariable Long idEmpresa){
+	public ResponseEntity<Empresa> cadastrarServicoEmpresa(@RequestBody Servico dados, @PathVariable Long idEmpresa){
 		dados.setOriginal(true);
 		Empresa empresa = repositorioEmpresa.findById(idEmpresa).orElse(null);
 		HttpStatus status = null;

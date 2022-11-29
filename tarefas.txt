@@ -1,0 +1,32 @@
+• Cadastro de empresa, ou seja, a unidade comercial que oferece o serviço de manutenção e venda de mercadorias.
+• Inclusão associação de usuários a uma determinada empresa.										OK
+• Definição dos tipos de usuário no sistema, que pode ser cliente, fornecedor ou funcionário.						OK									OK
+• Cadastro de veículos, mercadorias e serviços, para gerenciamento de vendas e serviços prestados a um usuário e seu veículo.
+• Inclusão de credencial para acesso de um usuário ao sistema.										OK
+
+
+
+crud
+
+Credencial
+Credencial Usuario senha			Get:Ok, Post:Ok
+Credencial Codigo de barras
+Documento					Get:Ok, Post:Ok
+Email						Get:Ok, Post:Ok
+Empresa						Get:Ok, Post:Ok
+Endereco					Get:Ok, Post:Ok
+Mercadoria					Get:Ok, Post:Ok
+Servico						Get:Ok, Post:Ok
+Telefone					Get:Ok, Post:Ok
+Usuario						Get:Ok, Post:Ok
+Veiculo						Get:Ok, Post:Ok
+Venda						Get:Ok, Post:Ok
+
+
+
+
+DUVIDAS 
+
+as mercadorias estão associadas a empresa e ao fornecedor ?
+
+ao remover algo de uma entidade pai ela automaticamente é excluida ?

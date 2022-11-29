@@ -45,7 +45,7 @@ public class VeiculoControle {
 	}
 	
 	@PostMapping("/cadastrar/{idUsuario}")
-	public ResponseEntity<Usuario> cadastrarVeiculo(@RequestBody Veiculo dados, @PathVariable Long idUsuario){
+	public ResponseEntity<Usuario> cadastrarVeiculoCliente(@RequestBody Veiculo dados, @PathVariable Long idUsuario){
 		Usuario usuario = repositorioUsuario.findById(idUsuario).orElse(null);
 		HttpStatus status = null;
 		if(usuario == null) {
