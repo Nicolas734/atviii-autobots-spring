@@ -76,6 +76,7 @@ public class UsuarioControle {
 			return new ResponseEntity<String>("Empresa não encontrada...", HttpStatus.NOT_FOUND);
 		}else {
 			empresa.getUsuarios().add(dados);
+			repositorioEmpresa.save(empresa);
 			return new ResponseEntity<Empresa>(empresa, HttpStatus.CREATED);
 		}
 	}
@@ -89,48 +90,53 @@ public class UsuarioControle {
 	
 	//@PutMapping("/atualizar/{idUsuario}")
 	
-	/*@DeleteMapping("/excluir/{idUsuario}")
+	@DeleteMapping("/excluir/{idUsuario}")
 	public ResponseEntity<?> excluirCliente(@PathVariable Long idUsuario){
-		Usuario usuario = repositorio.findById(idUsuario).orElse(null);
-		if(usuario == null) {
-			return new ResponseEntity<String>("Usuario não encontrado",HttpStatus.NOT_FOUND);
+		Usuario verificacao = repositorio.findById(idUsuario).orElse(null);
+		if(verificacao == null) {
+			return new ResponseEntity<String>("Usuario não encontrado...",HttpStatus.NOT_FOUND);
 		}else {
-			Set<Documento> documentos = usuario.getDocumentos();
-			Set<Telefone> telefones = usuario.getTelefones();
-			Set<Email> emails = usuario.getEmails();
-			Set<Credencial> credenciais = usuario.getCredenciais();
-			Set<Mercadoria> mercadorias = usuario.getMercadorias();
-			Set<Venda> vendas = usuario.getVendas();
-			Set<Veiculo> veiculos = usuario.getVeiculos();
-			if(vendas.size() > 0) {
-				for(Venda vendaRegistrada: repositorioVenda.findAll()) {
-					if(vendaRegistrada.getCliente().getId() == idUsuario) {
-						vendaRegistrada.setCliente(null);
-					}
-					if(vendaRegistrada.getFuncionario().getId() == idUsuario) {
-						vendaRegistrada.setFuncionario(null);
+			
+			//venda
+			for(Venda venda: repositorioVenda.findAll()) {
+				if(venda.getCliente() != null) {		
+					if(venda.getCliente().getId() == idUsuario) {
+						venda.setCliente(null);
+						repositorioVenda.save(venda);
 					}
 				}
-			}
-			if(veiculos.size() > 0) {
-				for(Veiculo veiculoRegistrado: repositorioVeiculo.findAll()) {
-					if(veiculoRegistrado.getProprietario().getId() == idUsuario) {
-						veiculoRegistrado.setProprietario(null);
+				if(venda.getFuncionario() != null) {	
+					if(venda.getFuncionario().getId() == idUsuario) {
+						venda.setFuncionario(null);
+						repositorioVenda.save(venda);
 					}
 				}
 			}
 			
-			usuario.getDocumentos().removeAll(documentos);
-			usuario.getTelefones().removeAll(telefones);
-			usuario.getEmails().removeAll(emails);
-			usuario.getCredenciais().removeAll(credenciais);
-			usuario.getMercadorias().removeAll(mercadorias);
-			usuario.getVeiculos().removeAll(veiculos);
-			usuario.getVendas().removeAll(vendas);
-			usuario.setEndereco(null);
-
-			repositorio.delete(usuario);
-			return new ResponseEntity<String>("Usuario excluido com sucesso",HttpStatus.ACCEPTED);
+			//veiculo
+			for(Veiculo veiculo: repositorioVeiculo.findAll()) {
+				if(veiculo.getProprietario() != null) {	
+					if(veiculo.getProprietario().getId() == idUsuario) {
+						veiculo.setProprietario(null);
+						repositorioVeiculo.save(veiculo);
+					}
+				}
+			}
+			
+			for(Empresa empresa: repositorioEmpresa.findAll()) {
+				if(!empresa.getUsuarios().isEmpty()) {
+					for(Usuario usuario: empresa.getUsuarios()) {
+						if(usuario.getId() == idUsuario) {
+							empresa.getUsuarios().remove(usuario);
+							repositorioEmpresa.save(empresa);
+						}
+						break;
+					}
+				}
+			}
+			
+			repositorio.deleteById(idUsuario);
+			return new ResponseEntity<>(repositorio.findAll(),HttpStatus.ACCEPTED);
 		}
-	}*/
+	}
 }

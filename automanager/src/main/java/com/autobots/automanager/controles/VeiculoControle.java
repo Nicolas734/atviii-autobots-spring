@@ -76,7 +76,7 @@ public class VeiculoControle {
 		}else {
 			//usuario
 			for(Usuario usuario: repositorioUsuario.findAll()) {
-				if(usuario.getVeiculos().size() > 0) {
+				if(!usuario.getVeiculos().isEmpty()) {
 					for(Veiculo veiculoUsuario: usuario.getVeiculos()) {
 						if(veiculoUsuario.getId() == idVeiculo) {
 							for(Usuario usuarioRegistrado: usuarios) {
@@ -89,11 +89,14 @@ public class VeiculoControle {
 			
 			//venda
 			for(Venda venda: repositorioVenda.findAll()) {
-				if(venda.getVeiculo().getId() == idVeiculo) {
-					venda.setVeiculo(null);
+				if(venda.getVeiculo() != null) {
+					if(venda.getVeiculo().getId() == idVeiculo) {
+						venda.setVeiculo(null);
+					}
 				}
 			}
-			
+
+			usuarios = repositorioUsuario.findAll();
 			repositorio.deleteById(idVeiculo);
 			return new ResponseEntity<>("Veiculo excluido com sucesso...",HttpStatus.ACCEPTED);
 		}

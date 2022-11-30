@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autobots.automanager.entidades.Credencial;
 import com.autobots.automanager.entidades.CredencialUsuarioSenha;
 import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.repositorios.RepositorioCredencialUsuarioSenha;
@@ -85,6 +87,29 @@ public class CredencialControle {
 				repositorioUsuario.save(usuario);
 				return new ResponseEntity<Usuario>(usuario,HttpStatus.CREATED);
 			}
+		}
+	}
+	
+	@DeleteMapping("/excluir/{idCredencial}")
+	public ResponseEntity<?> excluirCredencialUserSenha(@PathVariable Long idCredencial){
+		CredencialUsuarioSenha verificacao = repositorioCredencialUsuarioSenha.findById(idCredencial).orElse(null);
+		if(verificacao == null) {
+			return new ResponseEntity<String>("credencial não encontrada...", HttpStatus.NOT_FOUND);
+		}else {
+			
+			for(Usuario usuario:repositorioUsuario.findAll()) {
+				if(!usuario.getCredenciais().isEmpty()) {
+					for(Credencial credencial: usuario.getCredenciais()) {
+						if(credencial.getId() == idCredencial) {
+							usuario.getCredenciais().remove(credencial);
+							repositorioUsuario.save(usuario);
+						}
+						break;
+					}
+				}
+			}
+			
+			return new ResponseEntity<>("Credencial excluida com sucesso...", HttpStatus.ACCEPTED);
 		}
 	}
 

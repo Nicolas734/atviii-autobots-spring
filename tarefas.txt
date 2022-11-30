@@ -9,16 +9,16 @@
 crud
 
 Credencial
-Credencial Usuario senha			Get:Ok, Post:Ok
+Credencial Usuario senha			Get:Ok, Post:Ok, Delete:Ok
 Credencial Codigo de barras
-Documento					Get:Ok, Post:Ok
-Email						Get:Ok, Post:Ok
-Empresa						Get:Ok, Post:Ok
-Endereco					Get:Ok, Post:Ok
+Documento					Get:Ok, Post:Ok, Delete:Ok
+Email						Get:Ok, Post:Ok, Delete:Ok
+Empresa						Get:Ok, Post:Ok, Delete:Ok
+Endereco					Get:Ok, Post:Ok, Delete:Ok
 Mercadoria					Get:Ok, Post:Ok, Delete:Ok
 Servico						Get:Ok, Post:Ok, Delete:Ok
-Telefone					Get:Ok, Post:Ok
-Usuario						Get:Ok, Post:Ok
+Telefone					Get:Ok, Post:Ok, Delete:Ok
+Usuario						Get:Ok, Post:Ok, Delete:Ok
 Veiculo						Get:Ok, Post:Ok, Delete:Ok
 Venda						Get:Ok, Post:Ok, Delete:Ok
 
@@ -31,11 +31,10 @@ as mercadorias estão associadas a empresa e ao fornecedor ?
 
 ao remover algo de uma entidade pai ela automaticamente é excluida ?
 
+seria necessario ter um perfil adm para conseguir realizar todas as ações do sistema ? 
+
 
 CORREÇÕES
 
-verificar excluir mercadoria, venda, serviço e usuario
-
-mercadoria ok
-servico problema ao excluir o id 3
-usuario problema ao excluir usuario criado pela rota post
+Ao tentar deletar o endereco 3 e 4 não é possivel
+ajusatr delate do telefone

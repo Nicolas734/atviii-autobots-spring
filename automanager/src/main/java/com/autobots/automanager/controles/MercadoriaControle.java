@@ -75,48 +75,55 @@ public class MercadoriaControle {
 		List<Empresa> empresas = repositorioEmpresa.findAll();
 		List<Usuario> usuarios = repositorioUsuario.findAll();
 		List<Venda> vendas = repositorioVenda.findAll();
+		Mercadoria validacao = repositorio.findById(idMercadoria).orElse(null);
 		
-		//empresa
-		for(Empresa empresa: repositorioEmpresa.findAll()) {
-			if(empresa.getMercadorias().size() > 0) {
-				for(Mercadoria mercadoriaEmpresa: empresa.getMercadorias()) {
-					if(mercadoriaEmpresa.getId() == idMercadoria) {
-						for(Empresa empresaRegistrada: empresas) {
-							empresaRegistrada.getMercadorias().remove(mercadoriaEmpresa);
+		if(validacao == null) {
+			return new ResponseEntity<>("Mercadoria não encontrada...",HttpStatus.NOT_FOUND);
+		}else {
+			//empresa
+			for(Empresa empresa: repositorioEmpresa.findAll()) {
+				if(!empresa.getMercadorias().isEmpty()) {
+					for(Mercadoria mercadoriaEmpresa: empresa.getMercadorias()) {
+						if(mercadoriaEmpresa.getId() == idMercadoria) {
+							for(Empresa empresaRegistrada: empresas) {
+								empresaRegistrada.getMercadorias().remove(mercadoriaEmpresa);
+							}
 						}
 					}
 				}
 			}
-		}
-		
-		//usuario
-		for(Usuario usuario: repositorioUsuario.findAll()) {
-			if(usuario.getMercadorias().size() > 0) {
-				for(Mercadoria mercadoriaUsuario:usuario.getMercadorias()) {
-					if(mercadoriaUsuario.getId() == idMercadoria) {
-						for(Usuario usuarioRegistrado: usuarios) {
-							usuarioRegistrado.getMercadorias().remove(mercadoriaUsuario);
+			
+			//usuario
+			for(Usuario usuario: repositorioUsuario.findAll()) {
+				if(!usuario.getMercadorias().isEmpty()) {
+					for(Mercadoria mercadoriaUsuario:usuario.getMercadorias()) {
+						if(mercadoriaUsuario.getId() == idMercadoria) {
+							for(Usuario usuarioRegistrado: usuarios) {
+								usuarioRegistrado.getMercadorias().remove(mercadoriaUsuario);
+							}
 						}
 					}
 				}
 			}
-		}
-		
-		//venda
-		for(Venda venda: repositorioVenda.findAll()) {
-			if(venda.getMercadorias().size() > 0) {
-				for(Mercadoria mercadoriaVenda: venda.getMercadorias()) {
-					if(mercadoriaVenda.getId() == idMercadoria) {
-						for(Venda vendaRegistrada:vendas) {
-							vendaRegistrada.getMercadorias().remove(mercadoriaVenda);
+			
+			//venda
+			for(Venda venda: repositorioVenda.findAll()) {
+				if(!venda.getMercadorias().isEmpty()) {
+					for(Mercadoria mercadoriaVenda: venda.getMercadorias()) {
+						if(mercadoriaVenda.getId() == idMercadoria) {
+							for(Venda vendaRegistrada:vendas) {
+								vendaRegistrada.getMercadorias().remove(mercadoriaVenda);
+							}
 						}
 					}
 				}
 			}
+			empresas = repositorioEmpresa.findAll();
+			usuarios = repositorioUsuario.findAll();
+			vendas = repositorioVenda.findAll();
+			repositorio.deleteById(idMercadoria);
+			return new ResponseEntity<>("Mercadoria excluida com sucesso...",HttpStatus.ACCEPTED);
 		}
-
-		repositorio.deleteById(idMercadoria);
-		return new ResponseEntity<>("Mercadoria excluida com sucesso...",HttpStatus.ACCEPTED);
 	}
 
 }

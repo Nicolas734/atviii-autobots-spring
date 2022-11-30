@@ -131,7 +131,7 @@ public class VendaControle {
 
 			//empresa
 			for(Empresa empresa: repositorioEmpresa.findAll()) {
-				if(empresa.getVendas().size() > 0) {
+				if(!empresa.getVendas().isEmpty()) {
 					for(Venda vendaEmpresa: empresa.getVendas()) {
 						if(vendaEmpresa.getId() == idVenda) {
 							for(Empresa empresaRegistrada: empresas) {
@@ -144,7 +144,7 @@ public class VendaControle {
 			
 			//usuarios
 			for(Usuario usuario: repositorioUsuario.findAll()) {
-				if(usuario.getVendas().size() > 0) {
+				if(!usuario.getVendas().isEmpty()) {
 					for(Venda vendaUsuario: usuario.getVendas()) {
 						if(vendaUsuario.getId() == idVenda) {
 							for(Usuario usuarioRegistrado: usuarios) {
@@ -157,7 +157,7 @@ public class VendaControle {
 			
 			//veiculos
 			for(Veiculo veiculo: repositorioVeiculo.findAll()) {
-				if(veiculo.getVendas().size() > 0) {
+				if(!veiculo.getVendas().isEmpty()) {
 					for(Venda vendaVeiculo: veiculo.getVendas()) {
 						if(vendaVeiculo.getId() == idVenda) {
 							for(Veiculo veiculoRegistrado: veiculos) {
@@ -168,11 +168,13 @@ public class VendaControle {
 				}
 			}
 			
+			
+			empresas = repositorioEmpresa.findAll();
+			usuarios = repositorioUsuario.findAll();
+			veiculos = repositorioVeiculo.findAll();
 			repositorio.deleteById(idVenda);
-			return new ResponseEntity<>(veiculos, HttpStatus.ACCEPTED);
+			return new ResponseEntity<>("Venda excluida com sucesso...", HttpStatus.ACCEPTED);
 		}
-		
-		
 	}
 	
 }
