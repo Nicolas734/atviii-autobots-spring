@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,6 +47,40 @@ public class EnderecoControle {
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Endereco>(endereco,status);
+	}
+	
+	@PutMapping("/atualizar/{idEndereco}")
+	public ResponseEntity<?> atualizarEndereco(@PathVariable Long idEndereco, @RequestBody Endereco dados){
+		Endereco endereco = repositorio.findById(idEndereco).orElse(null);
+		if(endereco == null) {
+			return new ResponseEntity<>("Endereco não econtrado...", HttpStatus.NOT_FOUND);
+		}else {
+			if(dados != null) {
+				if(dados.getEstado() != null) {
+					endereco.setEstado(dados.getEstado());
+				}
+				if(dados.getCidade() != null) {
+					endereco.setCidade(dados.getCidade());
+				}
+				if(dados.getBairro() != null) {
+					endereco.setBairro(dados.getBairro());
+				}
+				if(dados.getRua() != null) {
+					endereco.setRua(dados.getRua());
+				}
+				if(dados.getNumero() != null) {
+					endereco.setNumero(dados.getNumero());
+				}
+				if(dados.getCodigoPostal() != null) {
+					endereco.setCodigoPostal(dados.getCodigoPostal());
+				}
+				if(dados.getInformacoesAdicionais() != null) {
+					endereco.setInformacoesAdicionais(dados.getInformacoesAdicionais());
+				}
+				repositorio.save(endereco);
+			}
+			return new ResponseEntity<>(endereco, HttpStatus.ACCEPTED);
+		}
 	}
 	
 	@DeleteMapping("/excluir/{idEndereco}")

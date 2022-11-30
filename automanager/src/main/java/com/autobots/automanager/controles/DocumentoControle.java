@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,6 +43,28 @@ public class DocumentoControle {
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Documento>(documento,status);
+	}
+	
+	@PutMapping("/atualizar/{idDocumento}")
+	public ResponseEntity<?> atualizarDocumento(@PathVariable Long idDocumento, @RequestBody Documento dados) {
+		Documento documento = repositorio.findById(idDocumento).orElse(null);
+		if(documento == null) {
+			return new ResponseEntity<>("Documento não econtrado...", HttpStatus.NOT_FOUND);
+		}else {
+			if(dados != null) {
+				if(dados.getNumero() != null) {
+					documento.setNumero(dados.getNumero());
+				}
+				if(dados.getTipo() != null) {
+					documento.setTipo(dados.getTipo());	
+				}
+				if(dados.getDataEmissao() != null) {
+					documento.setDataEmissao(dados.getDataEmissao());
+				}
+				repositorio.save(documento);
+			}
+			return new ResponseEntity<>(documento, HttpStatus.ACCEPTED);
+		}
 	}
 	
 	@DeleteMapping("/excluir/{idDocumento}")

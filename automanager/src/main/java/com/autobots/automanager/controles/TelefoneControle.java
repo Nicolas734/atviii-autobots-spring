@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,6 +47,25 @@ public class TelefoneControle {
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Telefone>(telefone,status);
+	}
+	
+	@PutMapping("/atualizar/{idTelefone}")
+	public ResponseEntity<?> atualizarTelefone(@PathVariable Long idTelefone, @RequestBody Telefone dados){
+		Telefone telefone = repositorio.findById(idTelefone).orElse(null);
+		if(telefone == null) {
+			return new ResponseEntity<>("Telefone não econtrado...", HttpStatus.NOT_FOUND);
+		}else {
+			if(dados != null) {
+				if(dados.getDdd() != null) {
+					telefone.setDdd(dados.getDdd());
+				}
+				if(dados.getNumero() != null) {
+					telefone.setNumero(dados.getNumero());
+				}
+				repositorio.save(telefone);
+			}
+			return new ResponseEntity<>(telefone, HttpStatus.ACCEPTED);
+		}
 	}
 	
 	@DeleteMapping("/excluir/{idTelefone}")

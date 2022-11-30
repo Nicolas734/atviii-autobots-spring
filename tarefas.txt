@@ -11,13 +11,13 @@ crud
 Credencial
 Credencial Usuario senha			Get:Ok, Post:Ok, Delete:Ok
 Credencial Codigo de barras
-Documento					Get:Ok, Post:Ok, Delete:Ok
-Email						Get:Ok, Post:Ok, Delete:Ok
+Documento					Get:Ok, Post:Ok, Delete:Ok, Put:Ok
+Email						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Empresa						Get:Ok, Post:Ok, Delete:Ok
-Endereco					Get:Ok, Post:Ok, Delete:Ok
+Endereco					Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Mercadoria					Get:Ok, Post:Ok, Delete:Ok
 Servico						Get:Ok, Post:Ok, Delete:Ok
-Telefone					Get:Ok, Post:Ok, Delete:Ok
+Telefone					Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Usuario						Get:Ok, Post:Ok, Delete:Ok
 Veiculo						Get:Ok, Post:Ok, Delete:Ok
 Venda						Get:Ok, Post:Ok, Delete:Ok
