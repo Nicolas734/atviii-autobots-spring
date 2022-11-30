@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -115,6 +116,22 @@ public class VendaControle {
 			repositorioEmpresa.save(empresa);
 			
 			return new ResponseEntity<Empresa>(empresa,HttpStatus.CREATED);
+		}
+	}
+	
+	@PutMapping("/atualizar/{idVenda}")
+	public ResponseEntity<?> atualizarVenda(@PathVariable Long idVenda, @RequestBody Venda dados){
+		Venda venda = repositorio.findById(idVenda).orElse(null);
+		if(venda == null) {
+			return new ResponseEntity<>("Venda não encontrada...", HttpStatus.NOT_FOUND);
+		}else {
+			if(dados != null) {
+				if(dados.getIdentificacao() != null) {
+					venda.setIdentificacao(dados.getIdentificacao());
+				}
+				repositorio.save(venda);
+			}
+			return new ResponseEntity<>(venda, HttpStatus.ACCEPTED);
 		}
 	}
 	

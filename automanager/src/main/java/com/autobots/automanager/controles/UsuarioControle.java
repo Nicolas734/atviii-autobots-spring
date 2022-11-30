@@ -88,7 +88,24 @@ public class UsuarioControle {
 		return new ResponseEntity<Usuario>(usuario,HttpStatus.CREATED);
 	}
 	
-	//@PutMapping("/atualizar/{idUsuario}")
+	@PutMapping("/atualizar/{idUsuario}")
+	public ResponseEntity<?> atualizarUsuario(@PathVariable Long idUsuario, @RequestBody Usuario dados){
+		Usuario usuario = repositorio.findById(idUsuario).orElse(null);
+		if(usuario == null) {
+			return new ResponseEntity<String>("Usuario não encontrado...",HttpStatus.NOT_FOUND);
+		}else {
+			if(dados != null) {
+				if(dados.getNome() != null) {
+					usuario.setNome(dados.getNome());
+				}
+				if(dados.getNomeSocial() != null) {
+					usuario.setNomeSocial(dados.getNomeSocial());
+				}
+				repositorio.save(usuario);
+			}
+			return new ResponseEntity<>(usuario, HttpStatus.ACCEPTED);
+		}
+	}
 	
 	@DeleteMapping("/excluir/{idUsuario}")
 	public ResponseEntity<?> excluirCliente(@PathVariable Long idUsuario){

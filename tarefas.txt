@@ -9,18 +9,18 @@
 crud
 
 Credencial
-Credencial Usuario senha			Get:Ok, Post:Ok, Delete:Ok
-Credencial Codigo de barras
+Credencial Usuario senha			Get:Ok, Post:Ok, Delete:Ok, Put:Ok
+Credencial Codigo de barras			Get:Ok,
 Documento					Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Email						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
-Empresa						Get:Ok, Post:Ok, Delete:Ok
+Empresa						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Endereco					Get:Ok, Post:Ok, Delete:Ok, Put:Ok
-Mercadoria					Get:Ok, Post:Ok, Delete:Ok
-Servico						Get:Ok, Post:Ok, Delete:Ok
+Mercadoria					Get:Ok, Post:Ok, Delete:Ok, Put:Ok
+Servico						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Telefone					Get:Ok, Post:Ok, Delete:Ok, Put:Ok
-Usuario						Get:Ok, Post:Ok, Delete:Ok
-Veiculo						Get:Ok, Post:Ok, Delete:Ok
-Venda						Get:Ok, Post:Ok, Delete:Ok
+Usuario						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
+Veiculo						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
+Venda						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 
 
 
@@ -32,6 +32,7 @@ as mercadorias estão associadas a empresa e ao fornecedor ?
 ao remover algo de uma entidade pai ela automaticamente é excluida ?
 
 seria necessario ter um perfil adm para conseguir realizar todas as ações do sistema ? 
+
 
 
 CORREÇÕES

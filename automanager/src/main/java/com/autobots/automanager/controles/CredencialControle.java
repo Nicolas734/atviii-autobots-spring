@@ -11,13 +11,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entidades.Credencial;
+import com.autobots.automanager.entidades.CredencialCodigoBarra;
 import com.autobots.automanager.entidades.CredencialUsuarioSenha;
 import com.autobots.automanager.entidades.Usuario;
+import com.autobots.automanager.repositorios.RepositorioCredencialCodigoBarra;
 import com.autobots.automanager.repositorios.RepositorioCredencialUsuarioSenha;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
 
@@ -28,9 +31,11 @@ public class CredencialControle {
 	@Autowired
 	private RepositorioCredencialUsuarioSenha repositorioCredencialUsuarioSenha;
 	@Autowired
+	private RepositorioCredencialCodigoBarra repositorioCredencialCodigoBarra;
+	@Autowired
 	private RepositorioUsuario repositorioUsuario;
 	
-	@GetMapping("/buscar")
+	@GetMapping("/buscar-credencial-user-senha")
 	public ResponseEntity<?> buscarCredenciaisUsuariosSenhas(){
 		List<CredencialUsuarioSenha> credenciais = repositorioCredencialUsuarioSenha.findAll();
 		if(credenciais.size() > 0) {
@@ -40,7 +45,7 @@ public class CredencialControle {
 		}
 	}
 	
-	@GetMapping("/buscar/{id}")
+	@GetMapping("/buscar-credencial-user-senha/{id}")
 	public ResponseEntity<?> buscarCredencialUsuarioSenhaPorId(@PathVariable Long id){
 		CredencialUsuarioSenha credencial = repositorioCredencialUsuarioSenha.findById(id).orElse(null);
 		if(credencial == null) {
@@ -90,6 +95,25 @@ public class CredencialControle {
 		}
 	}
 	
+	@PutMapping("/atualizar/{idCredencial}")
+	public ResponseEntity<?> atualizarCredencialUserSenha(@PathVariable Long idCredencial, @RequestBody CredencialUsuarioSenha dados){
+		CredencialUsuarioSenha credencial = repositorioCredencialUsuarioSenha.findById(idCredencial).orElse(null);
+		if(credencial == null) {
+			return new ResponseEntity<String>("credencial não encontrada...", HttpStatus.NOT_FOUND);
+		}else {
+			if(dados != null) {
+				if(dados.getNomeUsuario() != null) {
+					credencial.setNomeUsuario(dados.getNomeUsuario());
+				}
+				if(dados.getSenha() != null) {
+					credencial.setSenha(dados.getSenha());
+				}
+				repositorioCredencialUsuarioSenha.save(credencial);
+			}
+			return new ResponseEntity<>(credencial, HttpStatus.ACCEPTED);
+		}
+	}
+	
 	@DeleteMapping("/excluir/{idCredencial}")
 	public ResponseEntity<?> excluirCredencialUserSenha(@PathVariable Long idCredencial){
 		CredencialUsuarioSenha verificacao = repositorioCredencialUsuarioSenha.findById(idCredencial).orElse(null);
@@ -112,5 +136,30 @@ public class CredencialControle {
 			return new ResponseEntity<>("Credencial excluida com sucesso...", HttpStatus.ACCEPTED);
 		}
 	}
+	
+	@GetMapping("/buscar-codigo-barra")
+	public ResponseEntity<?> buscarCredenciaisCodigoBarras(){
+		List<CredencialCodigoBarra> credenciais = repositorioCredencialCodigoBarra.findAll();
+		return new ResponseEntity<List<CredencialCodigoBarra>>(credenciais, HttpStatus.FOUND);
+	}
 
+	@GetMapping("/buscar-codigo-barra/{id}")
+	public ResponseEntity<?> buscarCredencialCodigoBarraPorId(@PathVariable Long id){
+		CredencialCodigoBarra credencial = repositorioCredencialCodigoBarra.findById(id).orElse(null);
+		if(credencial == null) {
+			return new ResponseEntity<String>("credencial não encontrada...", HttpStatus.NOT_FOUND);
+		}else {
+			return new ResponseEntity<CredencialCodigoBarra>(credencial, HttpStatus.FOUND);
+		}
+	}
+	
+	/*@PostMapping("/cadastrar-codigo-barra")
+	public ResponseEntity<?> cadastrarCredencialCodigoBarra(@RequestBody CredencialCodigoBarra dados, @PathVariable Long idUsuario){
+		Usuario usuario = repositorioUsuario.findById(idUsuario).orElse(null);
+		if(usuario == null) {
+			
+		}else {
+			
+		}
+	}*/
 }

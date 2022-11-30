@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,6 +63,27 @@ public class ServicoControle {
 			status = HttpStatus.CREATED;
 		}
 		return new ResponseEntity<Empresa>(empresa, status);
+	}
+	
+	@PutMapping("/atualizar/{idServico}")
+	public ResponseEntity<?> atualizarServico(@PathVariable Long idServico, @RequestBody Servico dados){
+		Servico servico = repositorio.findById(idServico).orElse(null);
+		if(servico == null) {
+			return new ResponseEntity<>("Servico não encontrado", HttpStatus.NOT_FOUND);
+		}else {
+			if(dados != null) {
+				if(dados.getNome() != null) {
+					servico.setNome(dados.getNome());
+				}
+				if(dados.getDescricao() != null) {
+					servico.setDescricao(dados.getDescricao());
+				}
+				
+				servico.setValor(dados.getValor());
+				repositorio.save(servico);
+			}
+			return new ResponseEntity<>(servico,HttpStatus.ACCEPTED);
+		}
 	}
 	
 	@DeleteMapping("/excluir/{idServico}")

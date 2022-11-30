@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,6 +69,36 @@ public class MercadoriaControle {
 			status = HttpStatus.CREATED;
 		}
 		return new ResponseEntity<Empresa>(empresa,status);
+	}
+	
+	@PutMapping("/atualizar/{idMercadoria}")
+	public ResponseEntity<?> atualizarMercadoria(@PathVariable Long idMercadoria, @RequestBody Mercadoria dados){
+		Mercadoria mercadoria = repositorio.findById(idMercadoria).orElse(null);
+		if(mercadoria == null) {
+			return new ResponseEntity<>("Mercadoria não encontrada...",HttpStatus.NOT_FOUND);
+		}else {
+			if(dados != null) {
+				if(dados.getNome() != null) {
+					mercadoria.setNome(dados.getNome());
+				}
+				if(dados.getDescricao() != null) {
+					mercadoria.setDescricao(dados.getDescricao());
+				}
+				if(dados.getQuantidade() == 0) {
+					mercadoria.setQuantidade(dados.getQuantidade());
+				}
+				if(dados.getValidade() != null) {
+					mercadoria.setValidade(dados.getValidade());
+				}
+				if(dados.getFabricao() != null) {
+					mercadoria.setFabricao(dados.getFabricao());
+				}
+				
+				mercadoria.setValor(dados.getValor());
+				repositorio.save(mercadoria);
+			}
+			return new ResponseEntity<>(mercadoria, HttpStatus.ACCEPTED);
+		}
 	}
 	
 	@DeleteMapping("/excluir/{idMercadoria}")

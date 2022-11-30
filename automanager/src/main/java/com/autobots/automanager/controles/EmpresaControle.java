@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,6 +48,25 @@ public class EmpresaControle {
 		dados.setCadastro(new Date());
 		Empresa empresa = repositorio.save(dados);
 		return new ResponseEntity<Empresa>(empresa,HttpStatus.CREATED);
+	}
+	
+	@PutMapping("/atualizar/{idEmpresa}")
+	public ResponseEntity<?> atualizarEmpresa(@PathVariable Long idEmpresa, @RequestBody Empresa dados){
+		Empresa empresa = repositorio.findById(idEmpresa).orElse(null);
+		if(empresa == null) {
+			return new ResponseEntity<>("Empresa não econtrada...", HttpStatus.NOT_FOUND);
+		}else {
+			if(dados != null) {
+				if(dados.getNomeFantasia() != null) {
+					empresa.setNomeFantasia(dados.getNomeFantasia());
+				}
+				if(dados.getRazaoSocial() != null) {
+					empresa.setRazaoSocial(dados.getRazaoSocial());
+				}
+				repositorio.save(empresa);
+			}
+			return new ResponseEntity<>(empresa, HttpStatus.ACCEPTED);
+		}
 	}
 	
 	@DeleteMapping("/excluir/{idEmpresa}")
