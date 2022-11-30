@@ -1,8 +1,8 @@
-• Cadastro de empresa, ou seja, a unidade comercial que oferece o serviço de manutenção e venda de mercadorias.
-• Inclusão associação de usuários a uma determinada empresa.										OK
-• Definição dos tipos de usuário no sistema, que pode ser cliente, fornecedor ou funcionário.						OK									OK
+• Cadastro de empresa, ou seja, a unidade comercial que oferece o serviço de manutenção e venda de mercadorias.	OK
+• Inclusão associação de usuários a uma determinada empresa.	OK
+• Definição dos tipos de usuário no sistema, que pode ser cliente, fornecedor ou funcionário.	OK
 • Cadastro de veículos, mercadorias e serviços, para gerenciamento de vendas e serviços prestados a um usuário e seu veículo.
-• Inclusão de credencial para acesso de um usuário ao sistema.										OK
+• Inclusão de credencial para acesso de um usuário ao sistema.	OK
 
 
 
@@ -19,7 +19,7 @@ Mercadoria					Get:Ok, Post:Ok, Delete:Ok
 Servico						Get:Ok, Post:Ok, Delete:Ok
 Telefone					Get:Ok, Post:Ok
 Usuario						Get:Ok, Post:Ok
-Veiculo						Get:Ok, Post:Ok
+Veiculo						Get:Ok, Post:Ok, Delete:Ok
 Venda						Get:Ok, Post:Ok, Delete:Ok
 
 
