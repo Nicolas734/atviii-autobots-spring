@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autobots.automanager.entidades.Empresa;
 import com.autobots.automanager.entidades.Endereco;
 import com.autobots.automanager.entidades.Usuario;
+import com.autobots.automanager.modelos.AdicionadorLinkEndereco;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 import com.autobots.automanager.repositorios.RepositorioEndereco;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
@@ -30,10 +31,19 @@ public class EnderecoControle {
 	private RepositorioUsuario repositorioUsuario;
 	@Autowired
 	private RepositorioEmpresa repositorioEmpresa;
+	@Autowired
+	private AdicionadorLinkEndereco adicionarLink;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Endereco>> buscarEnderecos(){
 		List<Endereco> enderecos = repositorio.findAll();
+		adicionarLink.adicionarLink(enderecos);
+		if(!enderecos.isEmpty()) {			
+			for(Endereco endereco: enderecos) {
+				adicionarLink.adicionarLinkUpdate(endereco);
+				adicionarLink.adicionarLinkDelete(endereco);
+			}
+		}
 		return new ResponseEntity<List<Endereco>>(enderecos,HttpStatus.FOUND);
 	}
 	
@@ -44,6 +54,9 @@ public class EnderecoControle {
 		if(endereco == null) {
 			status = HttpStatus.NOT_FOUND;
 		}else {
+			adicionarLink.adicionarLink(endereco);
+			adicionarLink.adicionarLinkUpdate(endereco);
+			adicionarLink.adicionarLinkDelete(endereco);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Endereco>(endereco,status);

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autobots.automanager.entidades.Empresa;
 import com.autobots.automanager.entidades.Telefone;
 import com.autobots.automanager.entidades.Usuario;
+import com.autobots.automanager.modelos.AdicionadorLinkTelefone;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 import com.autobots.automanager.repositorios.RepositorioTelefone;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
@@ -30,10 +31,19 @@ public class TelefoneControle {
 	private RepositorioUsuario repositorioUsuario;
 	@Autowired
 	private RepositorioEmpresa repositorioEmpresa;
+	@Autowired
+	private AdicionadorLinkTelefone adicionarLink;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Telefone>> buscarTelefones(){
 		List<Telefone> telefones = repositorio.findAll();
+		adicionarLink.adicionarLink(telefones);
+		if(!telefones.isEmpty()) {
+			for(Telefone telefone: telefones) {
+				adicionarLink.adicionarLinkUpdate(telefone);
+				adicionarLink.adicionarLinkDelete(telefone);
+			}
+		}
 		return new ResponseEntity<List<Telefone>>(telefones,HttpStatus.FOUND);
 	}
 	
@@ -44,6 +54,9 @@ public class TelefoneControle {
 		if(telefone == null) {
 			status = HttpStatus.NOT_FOUND;
 		}else {
+			adicionarLink.adicionarLink(telefone);
+			adicionarLink.adicionarLinkUpdate(telefone);
+			adicionarLink.adicionarLinkDelete(telefone);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Telefone>(telefone,status);
