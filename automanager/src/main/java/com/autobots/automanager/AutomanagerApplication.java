@@ -243,11 +243,13 @@ public class AutomanagerApplication implements CommandLineRunner {
 		alinhamento2.setDescricao("Alinhamento das rodas do carro");
 		alinhamento2.setNome("Alinhamento de rodas");
 		alinhamento2.setValor(50);
+		alinhamento2.setOriginal(true);
 		
 		Servico balanceamento = new Servico();
 		balanceamento.setDescricao("balanceamento das rodas do carro");
 		balanceamento.setNome("balanceamento de rodas");
 		balanceamento.setValor(30);
+		balanceamento.setOriginal(true);
 		
 		Venda venda2 = new Venda();
 		venda2.setCadastro(new Date());

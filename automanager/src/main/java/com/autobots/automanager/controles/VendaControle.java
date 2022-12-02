@@ -1,7 +1,10 @@
 package com.autobots.automanager.controles;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,7 +35,7 @@ import com.autobots.automanager.repositorios.RepositorioVenda;
 @RestController
 @RequestMapping("/venda")
 public class VendaControle {
-	
+
 	@Autowired
 	public RepositorioVenda repositorio;
 	@Autowired
@@ -45,25 +48,25 @@ public class VendaControle {
 	public RepositorioServico repositorioServico;
 	@Autowired
 	public RepositorioVeiculo repositorioVeiculo;
-	
+
 	@GetMapping("/buscar")
-	public ResponseEntity<List<Venda>> buscarVendas(){
+	public ResponseEntity<List<Venda>> buscarVendas() {
 		List<Venda> vendas = repositorio.findAll();
-		return new ResponseEntity<List<Venda>>(vendas,HttpStatus.FOUND);
+		return new ResponseEntity<List<Venda>>(vendas, HttpStatus.FOUND);
 	}
-	
+
 	@GetMapping("/buscar/{id}")
-	public ResponseEntity<Venda> buscarVenda(@PathVariable Long id){
+	public ResponseEntity<Venda> buscarVenda(@PathVariable Long id) {
 		Venda venda = repositorio.findById(id).orElse(null);
 		HttpStatus status = null;
-		if(venda == null) {
+		if (venda == null) {
 			status = HttpStatus.NOT_FOUND;
-		}else {
+		} else {
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Venda>(venda, status);
 	}
-	
+
 	@PostMapping("/cadastrar")
 	public ResponseEntity<Empresa> cadastrarVenda(@RequestBody VendaMolde dados){
 		Empresa empresa = repositorioEmpresa.findById(dados.getIdEmpresa()).orElse(null);
@@ -73,11 +76,18 @@ public class VendaControle {
 		}else {
 			venda.setCliente(repositorioUsuario.findById(dados.getIdCliente()).orElse(null));
 			venda.setFuncionario(repositorioUsuario.findById(dados.getIdFuncionario()).orElse(null));
+			venda.setVeiculo(repositorioVeiculo.findById(dados.getIdVeiculo()).orElse(null));
+			venda.setCadastro(new Date());
+			venda.setIdentificacao(dados.getIdentificacao());
+			repositorio.save(venda);
+			
+			Set<Long> idsMercadorias = dados.getIdMercadorias();
+			Set<Long> idsServicos = dados.getIdServicos();
 			
 			if(dados.getIdMercadorias() != null) {
-				if(dados.getIdMercadorias().size() > 0) {					
-					for(Long id: dados.getIdMercadorias()) {
-						Mercadoria respostaBuscar = repositorioMercadoria.findById(id).orElse(null);
+				if(dados.getIdMercadorias().size() > 0) {	
+					for (Long id : idsMercadorias) {
+						Mercadoria respostaBuscar = repositorioMercadoria.getById(id);
 						Mercadoria mercadoria = new Mercadoria();
 						mercadoria.setValidade(respostaBuscar.getValidade());
 						mercadoria.setFabricao(respostaBuscar.getFabricao());
@@ -91,24 +101,23 @@ public class VendaControle {
 					}
 				}
 			}
-			
-			if(dados.getIdServicos() != null) {
-				if(dados.getIdServicos().size() > 0) {
-					for(Long id: dados.getIdServicos()) {
-						Servico respostaBusca = repositorioServico.findById(id).orElse(null);
+
+			if(dados.getIdMercadorias() != null) {	
+				if(dados.getIdServicos().size() > 0) {				
+					for (Long id : idsServicos) {
+						Servico respostaBusca = repositorioServico.getById(id);
 						Servico servico = new Servico();
 						servico.setNome(respostaBusca.getNome());
 						servico.setDescricao(respostaBusca.getDescricao());
 						servico.setValor(respostaBusca.getValor());
 						servico.setOriginal(false);
 						venda.getServicos().add(servico);
-					}	
+					}
 				}
 			}
 			
-			venda.setVeiculo(repositorioVeiculo.findById(dados.getIdVeiculo()).orElse(null));
-			venda.setCadastro(new Date());
-			venda.setIdentificacao(dados.getIdentificacao());
+			repositorio.save(venda);
+			
 			empresa.getVendas().add(venda);
 			Usuario funcionario = venda.getFuncionario();
 			
@@ -118,15 +127,15 @@ public class VendaControle {
 			return new ResponseEntity<Empresa>(empresa,HttpStatus.CREATED);
 		}
 	}
-	
+
 	@PutMapping("/atualizar/{idVenda}")
-	public ResponseEntity<?> atualizarVenda(@PathVariable Long idVenda, @RequestBody Venda dados){
+	public ResponseEntity<?> atualizarVenda(@PathVariable Long idVenda, @RequestBody Venda dados) {
 		Venda venda = repositorio.findById(idVenda).orElse(null);
-		if(venda == null) {
+		if (venda == null) {
 			return new ResponseEntity<>("Venda não encontrada...", HttpStatus.NOT_FOUND);
-		}else {
-			if(dados != null) {
-				if(dados.getIdentificacao() != null) {
+		} else {
+			if (dados != null) {
+				if (dados.getIdentificacao() != null) {
 					venda.setIdentificacao(dados.getIdentificacao());
 				}
 				repositorio.save(venda);
@@ -134,58 +143,57 @@ public class VendaControle {
 			return new ResponseEntity<>(venda, HttpStatus.ACCEPTED);
 		}
 	}
-	
+
 	@DeleteMapping("/excluir/{idVenda}")
-	public ResponseEntity<?> excluirVenda(@PathVariable Long idVenda){
+	public ResponseEntity<?> excluirVenda(@PathVariable Long idVenda) {
 		List<Empresa> empresas = repositorioEmpresa.findAll();
 		List<Usuario> usuarios = repositorioUsuario.findAll();
 		List<Veiculo> veiculos = repositorioVeiculo.findAll();
 		Venda verificador = repositorio.findById(idVenda).orElse(null);
-		
-		if(verificador == null) {
-			return new ResponseEntity<>("Venda não encontrada...", HttpStatus.NOT_FOUND);
-		}else {
 
-			//empresa
-			for(Empresa empresa: repositorioEmpresa.findAll()) {
-				if(!empresa.getVendas().isEmpty()) {
-					for(Venda vendaEmpresa: empresa.getVendas()) {
-						if(vendaEmpresa.getId() == idVenda) {
-							for(Empresa empresaRegistrada: empresas) {
+		if (verificador == null) {
+			return new ResponseEntity<>("Venda não encontrada...", HttpStatus.NOT_FOUND);
+		} else {
+
+			// empresa
+			for (Empresa empresa : repositorioEmpresa.findAll()) {
+				if (!empresa.getVendas().isEmpty()) {
+					for (Venda vendaEmpresa : empresa.getVendas()) {
+						if (vendaEmpresa.getId() == idVenda) {
+							for (Empresa empresaRegistrada : empresas) {
 								empresaRegistrada.getVendas().remove(vendaEmpresa);
 							}
 						}
 					}
 				}
 			}
-			
-			//usuarios
-			for(Usuario usuario: repositorioUsuario.findAll()) {
-				if(!usuario.getVendas().isEmpty()) {
-					for(Venda vendaUsuario: usuario.getVendas()) {
-						if(vendaUsuario.getId() == idVenda) {
-							for(Usuario usuarioRegistrado: usuarios) {
+
+			// usuarios
+			for (Usuario usuario : repositorioUsuario.findAll()) {
+				if (!usuario.getVendas().isEmpty()) {
+					for (Venda vendaUsuario : usuario.getVendas()) {
+						if (vendaUsuario.getId() == idVenda) {
+							for (Usuario usuarioRegistrado : usuarios) {
 								usuarioRegistrado.getVendas().remove(vendaUsuario);
 							}
 						}
 					}
 				}
 			}
-			
-			//veiculos
-			for(Veiculo veiculo: repositorioVeiculo.findAll()) {
-				if(!veiculo.getVendas().isEmpty()) {
-					for(Venda vendaVeiculo: veiculo.getVendas()) {
-						if(vendaVeiculo.getId() == idVenda) {
-							for(Veiculo veiculoRegistrado: veiculos) {
+
+			// veiculos
+			for (Veiculo veiculo : repositorioVeiculo.findAll()) {
+				if (!veiculo.getVendas().isEmpty()) {
+					for (Venda vendaVeiculo : veiculo.getVendas()) {
+						if (vendaVeiculo.getId() == idVenda) {
+							for (Veiculo veiculoRegistrado : veiculos) {
 								veiculoRegistrado.getVendas().remove(vendaVeiculo);
 							}
 						}
 					}
 				}
 			}
-			
-			
+
 			empresas = repositorioEmpresa.findAll();
 			usuarios = repositorioUsuario.findAll();
 			veiculos = repositorioVeiculo.findAll();
@@ -193,5 +201,5 @@ public class VendaControle {
 			return new ResponseEntity<>("Venda excluida com sucesso...", HttpStatus.ACCEPTED);
 		}
 	}
-	
+
 }

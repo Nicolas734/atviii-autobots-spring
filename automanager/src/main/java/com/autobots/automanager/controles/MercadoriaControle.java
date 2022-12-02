@@ -1,5 +1,6 @@
 package com.autobots.automanager.controles;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import com.autobots.automanager.entidades.Empresa;
 import com.autobots.automanager.entidades.Mercadoria;
 import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.entidades.Venda;
+import com.autobots.automanager.modelos.AdicionadorLinkMercadoria;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 import com.autobots.automanager.repositorios.RepositorioMercadoria;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
@@ -36,10 +38,21 @@ public class MercadoriaControle {
 	private RepositorioUsuario repositorioUsuario;
 	@Autowired
 	private RepositorioVenda repositorioVenda;
+	@Autowired
+	private AdicionadorLinkMercadoria adionarLink;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Mercadoria>> buscarMercadorias(){
 		List<Mercadoria> mercadorias = repositorio.findAll();
+		List<Mercadoria> novaListaMercadoria = new ArrayList<Mercadoria>();
+		for(Mercadoria mercadoriaRegistrada: mercadorias) {
+			if(mercadoriaRegistrada.getOriginal() != null) {				
+				if(mercadoriaRegistrada.getOriginal() == true) {
+					novaListaMercadoria.add(mercadoriaRegistrada);
+				}
+			}
+		}
+		adionarLink.adicionarLink(mercadorias);
 		return new ResponseEntity<List<Mercadoria>>(mercadorias, HttpStatus.FOUND);
 	}
 	
@@ -50,6 +63,7 @@ public class MercadoriaControle {
 		if(mercadoria == null) {
 			status = HttpStatus.NOT_FOUND;
 		}else {
+			//adionarLink.adicionarLink(mercadoria);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Mercadoria>(mercadoria,status);

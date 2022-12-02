@@ -19,9 +19,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-@EqualsAndHashCode(exclude = { "cliente", "funcionario", "veiculo" })
+@EqualsAndHashCode(exclude = { "cliente", "funcionario", "veiculo", "servicos" })
 @Entity
 public class Venda {
 	@Id

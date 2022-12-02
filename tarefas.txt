@@ -8,16 +8,15 @@
 
 crud
 
-Credencial
-Credencial Usuario senha			Get:Ok, Post:Ok, Delete:Ok, Put:Ok
-Credencial Codigo de barras			Get:Ok,
+Credencial Usuario senha		Get:Ok, Post:Ok, Delete:Ok, Put:Ok
+Credencial Codigo de barras	Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Documento					Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Email						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Empresa						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
-Endereco					Get:Ok, Post:Ok, Delete:Ok, Put:Ok
+Endereco						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Mercadoria					Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Servico						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
-Telefone					Get:Ok, Post:Ok, Delete:Ok, Put:Ok
+Telefone						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Usuario						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Veiculo						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 Venda						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
@@ -25,17 +24,18 @@ Venda						Get:Ok, Post:Ok, Delete:Ok, Put:Ok
 
 
 
-DUVIDAS 
+HATEOS
 
-as mercadorias estão associadas a empresa e ao fornecedor ?
-
-ao remover algo de uma entidade pai ela automaticamente é excluida ?
-
-seria necessario ter um perfil adm para conseguir realizar todas as ações do sistema ? 
-
-
-
-CORREÇÕES
-
-Ao tentar deletar o endereco 3 e 4 não é possivel
-ajusatr delate do telefone
+Credencial
+Credencial Usuario senha		
+Credencial Codigo de barras		
+Documento					
+Email						
+Empresa					
+Endereco					
+Mercadoria					
+Servico					
+Telefone					
+Usuario					
+Veiculo					
+Venda						

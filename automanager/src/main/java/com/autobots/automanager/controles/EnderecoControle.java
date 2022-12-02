@@ -91,14 +91,15 @@ public class EnderecoControle {
 		}else {
 
 			//usuario
-			for(Usuario usuario: repositorioUsuario.findAll()) {
+			List<Usuario> usuarios = repositorioUsuario.findAll(); 
+			for(Usuario usuario: usuarios) {
 				if(usuario.getEndereco() != null) {
 					if(usuario.getEndereco().getId() == idEndereco) {
 						usuario.setEndereco(null);
 						repositorioUsuario.save(usuario);
+						break;
 					}
 				}
-				break;
 			}
 
 			//empresa
@@ -107,11 +108,10 @@ public class EnderecoControle {
 					if(empresa.getEndereco().getId() == idEndereco) {
 						empresa.setEndereco(null);
 						repositorioEmpresa.save(empresa);
+						break;
 					}
 				}
-				break;
 			}
-			
 			return new ResponseEntity<>("Endereco excluido com sucesso...", HttpStatus.ACCEPTED);
 		}
 	}

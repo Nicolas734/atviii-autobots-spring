@@ -1,5 +1,6 @@
 package com.autobots.automanager.controles;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,15 @@ public class ServicoControle {
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Servico>> buscarServicos(){
 		List<Servico> servicos = repositorio.findAll();
-		return new ResponseEntity<List<Servico>>(servicos, HttpStatus.FOUND);
+		List<Servico> novaListaServicos = new ArrayList<Servico>();
+		for(Servico servicoRegistrado: servicos) {
+			if(servicoRegistrado.getOriginal() != null) {	
+				if(servicoRegistrado.getOriginal() == true) {
+					novaListaServicos.add(servicoRegistrado);
+				}
+			}
+		}
+		return new ResponseEntity<List<Servico>>(novaListaServicos, HttpStatus.FOUND);
 	}
 	
 	@GetMapping("/buscar/{id}")

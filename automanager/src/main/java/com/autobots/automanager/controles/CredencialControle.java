@@ -127,8 +127,8 @@ public class CredencialControle {
 						if(credencial.getId() == idCredencial) {
 							usuario.getCredenciais().remove(credencial);
 							repositorioUsuario.save(usuario);
+							break;
 						}
-						break;
 					}
 				}
 			}
@@ -136,6 +136,9 @@ public class CredencialControle {
 			return new ResponseEntity<>("Credencial excluida com sucesso...", HttpStatus.ACCEPTED);
 		}
 	}
+	
+	
+	//CREDENCIAL CODIGO DE BARRAS
 	
 	@GetMapping("/buscar-codigo-barra")
 	public ResponseEntity<?> buscarCredenciaisCodigoBarras(){
@@ -153,13 +156,66 @@ public class CredencialControle {
 		}
 	}
 	
-	/*@PostMapping("/cadastrar-codigo-barra")
+	@PostMapping("/cadastrar-codigo-barra/{idUsuario}")
 	public ResponseEntity<?> cadastrarCredencialCodigoBarra(@RequestBody CredencialCodigoBarra dados, @PathVariable Long idUsuario){
 		Usuario usuario = repositorioUsuario.findById(idUsuario).orElse(null);
 		if(usuario == null) {
-			
+			return new ResponseEntity<String>("credencial não encontrada...", HttpStatus.NOT_FOUND);
 		}else {
-			
+			List<CredencialCodigoBarra> credenciais = repositorioCredencialCodigoBarra.findAll();
+			Boolean verificador = false;
+			for(CredencialCodigoBarra credencial: credenciais) {
+				if(dados.getCodigo() == credencial.getCodigo()) {
+					verificador = true;
+				}
+			}
+			if (verificador == true) {
+				return new ResponseEntity<String>("Credencial ja existente...",HttpStatus.CONFLICT);
+			}else {
+				double randomNumero = Math.random();
+				dados.setCodigo(randomNumero);
+				dados.setCriacao(new Date());
+				usuario.getCredenciais().add(dados);
+				repositorioUsuario.save(usuario);
+				return new ResponseEntity<Usuario>(usuario,HttpStatus.CREATED);
+			}
 		}
-	}*/
+	}
+	
+	@PutMapping("/atualizar-codigo-barra/{idCredencial}")
+	public ResponseEntity<?> atualizarCredencialCodigoBarra(@PathVariable Long idCredencial, @RequestBody CredencialCodigoBarra dados){
+		CredencialCodigoBarra credencial = repositorioCredencialCodigoBarra.findById(idCredencial).orElse(null);
+		if(credencial == null) {
+			return new ResponseEntity<String>("credencial não encontrada...", HttpStatus.NOT_FOUND);
+		}else {
+			if(dados != null) {
+				
+				credencial.setCodigo(dados.getCodigo());
+				repositorioCredencialCodigoBarra.save(credencial);
+			}
+			return new ResponseEntity<>(credencial, HttpStatus.ACCEPTED);
+		}
+	}
+	
+	@DeleteMapping("/excluir-codigo-barra/{idCredencial}")
+	public ResponseEntity<?> excluirCredencialCodigoBarra(@PathVariable Long idCredencial){
+		CredencialCodigoBarra verificacao = repositorioCredencialCodigoBarra.findById(idCredencial).orElse(null);
+		if(verificacao == null) {
+			return new ResponseEntity<String>("credencial não encontrada...", HttpStatus.NOT_FOUND);
+		}else {
+			for(Usuario usuario:repositorioUsuario.findAll()) {
+				if(!usuario.getCredenciais().isEmpty()) {
+					for(Credencial credencial: usuario.getCredenciais()) {
+						if(credencial.getId() == idCredencial) {
+							usuario.getCredenciais().remove(credencial);
+							repositorioUsuario.save(usuario);
+							break;
+						}
+					}
+				}
+			}
+			
+			return new ResponseEntity<>("Credencial excluida com sucesso...", HttpStatus.ACCEPTED);
+		}
+	}
 }
