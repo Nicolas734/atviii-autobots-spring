@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entidades.Email;
 import com.autobots.automanager.entidades.Usuario;
+import com.autobots.automanager.modelos.AdicionadorLinkEmail;
 import com.autobots.automanager.repositorios.RepositorioEmail;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
 
@@ -26,10 +27,19 @@ public class EmailControle {
 	private RepositorioEmail repositorio;
 	@Autowired
 	private RepositorioUsuario repositorioUsuario;
+	@Autowired
+	private AdicionadorLinkEmail adicionarLink;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Email>> buscarEmails(){
 		List<Email> emails = repositorio.findAll();
+		adicionarLink.adicionarLink(emails);
+		if(!emails.isEmpty()) {
+			for(Email email: emails) {
+				adicionarLink.adicionarLinkUpdate(email);
+				adicionarLink.adicionarLinkDelete(email);			
+			}
+		}
 		return new ResponseEntity<List<Email>>(emails,HttpStatus.FOUND);
 	}
 	
@@ -40,6 +50,9 @@ public class EmailControle {
 		if(email == null) {
 			status = HttpStatus.NOT_FOUND;
 		}else {
+			adicionarLink.adicionarLink(email);
+			adicionarLink.adicionarLinkUpdate(email);
+			adicionarLink.adicionarLinkDelete(email);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Email>(email,status);

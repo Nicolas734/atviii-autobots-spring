@@ -78,6 +78,11 @@ public class ServicoControle {
 		}else {
 			empresa.getServicos().add(dados);
 			repositorioEmpresa.save(empresa);
+			for(Servico servico: empresa.getServicos()) {
+				adicionarLink.adicionarLink(servico);
+				adicionarLink.adicionarLinkUpdate(servico);
+				adicionarLink.adicionarLinkDelete(servico);
+			}
 			status = HttpStatus.CREATED;
 		}
 		return new ResponseEntity<Empresa>(empresa, status);

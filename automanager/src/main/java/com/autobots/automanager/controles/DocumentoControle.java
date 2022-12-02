@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entidades.Documento;
 import com.autobots.automanager.entidades.Usuario;
+import com.autobots.automanager.modelos.AdicionadorLinkDocumento;
 import com.autobots.automanager.repositorios.RepositorioDocumento;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
 
@@ -26,10 +27,19 @@ public class DocumentoControle {
 	private RepositorioDocumento repositorio;
 	@Autowired
 	private RepositorioUsuario repositorioUsuario;
+	@Autowired
+	private AdicionadorLinkDocumento adicionarLink;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Documento>> buscarDocumentos(){
 		List<Documento> documentos = repositorio.findAll();
+		adicionarLink.adicionarLink(documentos);
+		if(!documentos.isEmpty()) {		
+			for(Documento documento: documentos) {
+				adicionarLink.adicionarLinkUpdate(documento);
+				adicionarLink.adicionarLinkDelete(documento);
+			}
+		}
 		return new ResponseEntity<List<Documento>>(documentos,HttpStatus.FOUND);
 	}
 	
@@ -40,6 +50,9 @@ public class DocumentoControle {
 		if(documento == null) {
 			status = HttpStatus.NOT_FOUND;
 		}else {
+			adicionarLink.adicionarLink(documento);
+			adicionarLink.adicionarLinkUpdate(documento);
+			adicionarLink.adicionarLinkDelete(documento);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Documento>(documento,status);

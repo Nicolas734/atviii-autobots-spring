@@ -35,12 +35,12 @@ HATEOS
 Credencial
 Credencial Usuario senha		
 Credencial Codigo de barras		
-Documento					
-Email						
+Documento				Ok				
+Email					Ok					
 Empresa					
 Endereco					
 Mercadoria				Ok					
-Servico					
+Servico					Ok			
 Telefone					
 Usuario					
 Veiculo					
