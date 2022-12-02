@@ -24,6 +24,7 @@ import com.autobots.automanager.entidades.Servico;
 import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.entidades.Veiculo;
 import com.autobots.automanager.entidades.Venda;
+import com.autobots.automanager.modelos.AdicionadorLinkVenda;
 import com.autobots.automanager.modelos.VendaMolde;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 import com.autobots.automanager.repositorios.RepositorioMercadoria;
@@ -48,10 +49,19 @@ public class VendaControle {
 	public RepositorioServico repositorioServico;
 	@Autowired
 	public RepositorioVeiculo repositorioVeiculo;
+	@Autowired
+	public AdicionadorLinkVenda adicionarLink;
 
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Venda>> buscarVendas() {
 		List<Venda> vendas = repositorio.findAll();
+		adicionarLink.adicionarLink(vendas);
+		if(!vendas.isEmpty()) {
+			for(Venda venda: vendas) {
+				adicionarLink.adicionarLinkUpdate(venda);
+				adicionarLink.adicionarLinkDelete(venda);
+			}
+		}
 		return new ResponseEntity<List<Venda>>(vendas, HttpStatus.FOUND);
 	}
 
@@ -62,6 +72,9 @@ public class VendaControle {
 		if (venda == null) {
 			status = HttpStatus.NOT_FOUND;
 		} else {
+			adicionarLink.adicionarLink(venda);
+			adicionarLink.adicionarLinkUpdate(venda);
+			adicionarLink.adicionarLinkDelete(venda);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Venda>(venda, status);
@@ -123,6 +136,12 @@ public class VendaControle {
 			
 			funcionario.getVendas().add(venda);
 			repositorioEmpresa.save(empresa);
+			
+			for(Venda vendaRegistrada: empresa.getVendas()) {
+				adicionarLink.adicionarLink(vendaRegistrada);
+				adicionarLink.adicionarLinkUpdate(vendaRegistrada);
+				adicionarLink.adicionarLinkDelete(vendaRegistrada);
+			}
 			
 			return new ResponseEntity<Empresa>(empresa,HttpStatus.CREATED);
 		}

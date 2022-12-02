@@ -37,11 +37,11 @@ Credencial Usuario senha
 Credencial Codigo de barras		
 Documento				Ok				
 Email					Ok					
-Empresa								
+Empresa					Ok			
 Endereco				Ok	
 Mercadoria				Ok					
 Servico					Ok			
 Telefone				Ok					
 Usuario					Ok
 Veiculo					Ok				
-Venda						
+Venda					Ok

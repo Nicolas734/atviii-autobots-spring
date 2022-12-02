@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entidades.Empresa;
+import com.autobots.automanager.modelos.AdicionadorLinkEmpresa;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 
 @RestController
@@ -24,10 +25,19 @@ public class EmpresaControle {
 	
 	@Autowired
 	private RepositorioEmpresa repositorio;
+	@Autowired
+	private AdicionadorLinkEmpresa adicionarLink;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Empresa>> buscarEmpresas() {
 		List<Empresa> empresas = repositorio.findAll();
+		adicionarLink.adicionarLink(empresas);
+		if(!empresas.isEmpty()) {
+			for(Empresa empresa: empresas) {
+				adicionarLink.adicionarLinkUpdate(empresa);
+				adicionarLink.adicionarLinkDelete(empresa);
+			}
+		}
 		return new ResponseEntity<List<Empresa>>(empresas,HttpStatus.FOUND);
 	}
 	
@@ -38,6 +48,9 @@ public class EmpresaControle {
 		if(empresa == null) {
 			status = HttpStatus.NOT_FOUND;
 		}else {
+			adicionarLink.adicionarLink(empresa);
+			adicionarLink.adicionarLinkUpdate(empresa);
+			adicionarLink.adicionarLinkDelete(empresa);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Empresa>(empresa,status);
@@ -47,6 +60,9 @@ public class EmpresaControle {
 	public ResponseEntity<Empresa> cadastrarEmpresa(@RequestBody Empresa dados){
 		dados.setCadastro(new Date());
 		Empresa empresa = repositorio.save(dados);
+		adicionarLink.adicionarLink(empresa);
+		adicionarLink.adicionarLinkUpdate(empresa);
+		adicionarLink.adicionarLinkDelete(empresa);
 		return new ResponseEntity<Empresa>(empresa,HttpStatus.CREATED);
 	}
 	
