@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autobots.automanager.entidades.Empresa;
 import com.autobots.automanager.entidades.Servico;
 import com.autobots.automanager.entidades.Venda;
+import com.autobots.automanager.modelos.AdicionadorLinkServico;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 import com.autobots.automanager.repositorios.RepositorioServico;
 import com.autobots.automanager.repositorios.RepositorioVenda;
@@ -32,6 +33,8 @@ public class ServicoControle {
 	private RepositorioEmpresa repositorioEmpresa;
 	@Autowired
 	private RepositorioVenda repositorioVenda;
+	@Autowired
+	private AdicionadorLinkServico adicionarLink;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Servico>> buscarServicos(){
@@ -40,10 +43,13 @@ public class ServicoControle {
 		for(Servico servicoRegistrado: servicos) {
 			if(servicoRegistrado.getOriginal() != null) {	
 				if(servicoRegistrado.getOriginal() == true) {
+					adicionarLink.adicionarLinkUpdate(servicoRegistrado);
+					adicionarLink.adicionarLinkDelete(servicoRegistrado);
 					novaListaServicos.add(servicoRegistrado);
 				}
 			}
 		}
+		adicionarLink.adicionarLink(novaListaServicos);
 		return new ResponseEntity<List<Servico>>(novaListaServicos, HttpStatus.FOUND);
 	}
 	
@@ -54,6 +60,9 @@ public class ServicoControle {
 		if(servico == null) {
 			status = HttpStatus.NOT_FOUND;
 		}else {
+			adicionarLink.adicionarLink(servico);
+			adicionarLink.adicionarLinkUpdate(servico);
+			adicionarLink.adicionarLinkDelete(servico);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Servico>(servico, status);

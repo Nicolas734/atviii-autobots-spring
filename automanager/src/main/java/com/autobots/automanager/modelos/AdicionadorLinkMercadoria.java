@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.stereotype.Component;
 
 import com.autobots.automanager.controles.MercadoriaControle;
 import com.autobots.automanager.entidades.Mercadoria;
 
+@Component
 public class AdicionadorLinkMercadoria implements AdicionadorLink<Mercadoria>{
 
 	@Override
@@ -18,7 +20,7 @@ public class AdicionadorLinkMercadoria implements AdicionadorLink<Mercadoria>{
 					.linkTo(WebMvcLinkBuilder
 							.methodOn(MercadoriaControle.class)
 							.buscarMercadoria(id))
-					.withSelfRel();
+					.withRel("Visualizar mercadoria de id " + id);
 			mercadoria.add(linkProprio);
 		}
 	}
@@ -34,12 +36,12 @@ public class AdicionadorLinkMercadoria implements AdicionadorLink<Mercadoria>{
 	}
 
 	@Override
-	public void adiconarLinkUpdate(Mercadoria objeto) {
+	public void adicionarLinkUpdate(Mercadoria objeto) {
 		Link linkProprio = WebMvcLinkBuilder
 				.linkTo(WebMvcLinkBuilder
 						.methodOn(MercadoriaControle.class)
 						.atualizarMercadoria(objeto.getId(), objeto))
-				.withSelfRel();
+				.withRel("Atualizar mercadoria de id " + objeto.getId());
 		objeto.add(linkProprio);
 	}
 
@@ -49,7 +51,7 @@ public class AdicionadorLinkMercadoria implements AdicionadorLink<Mercadoria>{
 				.linkTo(WebMvcLinkBuilder
 						.methodOn(MercadoriaControle.class)
 						.excluirMercadoriaEmpresa(objeto.getId()))
-				.withSelfRel();
+				.withRel("Excluir mercadoria de id " + objeto.getId());
 		objeto.add(linkProprio);
 	}
 

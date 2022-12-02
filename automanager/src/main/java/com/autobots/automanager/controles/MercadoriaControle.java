@@ -39,7 +39,7 @@ public class MercadoriaControle {
 	@Autowired
 	private RepositorioVenda repositorioVenda;
 	@Autowired
-	private AdicionadorLinkMercadoria adionarLink;
+	private AdicionadorLinkMercadoria adicionarLink;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Mercadoria>> buscarMercadorias(){
@@ -48,11 +48,13 @@ public class MercadoriaControle {
 		for(Mercadoria mercadoriaRegistrada: mercadorias) {
 			if(mercadoriaRegistrada.getOriginal() != null) {				
 				if(mercadoriaRegistrada.getOriginal() == true) {
+					adicionarLink.adicionarLinkUpdate(mercadoriaRegistrada);
+					adicionarLink.adicionarLinkDelete(mercadoriaRegistrada);
 					novaListaMercadoria.add(mercadoriaRegistrada);
 				}
 			}
 		}
-		adionarLink.adicionarLink(mercadorias);
+		adicionarLink.adicionarLink(novaListaMercadoria);
 		return new ResponseEntity<List<Mercadoria>>(mercadorias, HttpStatus.FOUND);
 	}
 	
@@ -63,7 +65,9 @@ public class MercadoriaControle {
 		if(mercadoria == null) {
 			status = HttpStatus.NOT_FOUND;
 		}else {
-			//adionarLink.adicionarLink(mercadoria);
+			adicionarLink.adicionarLink(mercadoria);
+			adicionarLink.adicionarLinkUpdate(mercadoria);
+			adicionarLink.adicionarLinkDelete(mercadoria);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Mercadoria>(mercadoria,status);
@@ -80,6 +84,11 @@ public class MercadoriaControle {
 		}else {
 			empresa.getMercadorias().add(dados);
 			repositorioEmpresa.save(empresa);
+			for(Mercadoria mercadoria: empresa.getMercadorias()) {
+				adicionarLink.adicionarLink(mercadoria);
+				adicionarLink.adicionarLinkUpdate(mercadoria);
+				adicionarLink.adicionarLinkDelete(mercadoria);
+			}
 			status = HttpStatus.CREATED;
 		}
 		return new ResponseEntity<Empresa>(empresa,status);

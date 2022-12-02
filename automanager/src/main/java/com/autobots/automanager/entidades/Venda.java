@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
@@ -24,7 +26,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(exclude = { "cliente", "funcionario", "veiculo", "servicos" })
 @Entity
-public class Venda {
+public class Venda extends RepresentationModel<Venda>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

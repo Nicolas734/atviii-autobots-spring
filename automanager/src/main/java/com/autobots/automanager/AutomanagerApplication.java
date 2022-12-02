@@ -212,7 +212,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		alinhamento.setOriginal(true);
 
 		empresa.getServicos().add(trocaRodas);
-		empresa.getServicos().add(alinhamento);
+		
 
 		Venda venda = new Venda();
 		venda.setCadastro(new Date());
