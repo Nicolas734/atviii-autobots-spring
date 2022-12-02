@@ -20,6 +20,8 @@ import com.autobots.automanager.entidades.Credencial;
 import com.autobots.automanager.entidades.CredencialCodigoBarra;
 import com.autobots.automanager.entidades.CredencialUsuarioSenha;
 import com.autobots.automanager.entidades.Usuario;
+import com.autobots.automanager.modelos.AdicionadorLinkCredencialCodigoDeBarra;
+import com.autobots.automanager.modelos.AdicionarLinkCredencialUsuarioSenha;
 import com.autobots.automanager.repositorios.RepositorioCredencialCodigoBarra;
 import com.autobots.automanager.repositorios.RepositorioCredencialUsuarioSenha;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
@@ -34,11 +36,20 @@ public class CredencialControle {
 	private RepositorioCredencialCodigoBarra repositorioCredencialCodigoBarra;
 	@Autowired
 	private RepositorioUsuario repositorioUsuario;
+	@Autowired
+	private AdicionarLinkCredencialUsuarioSenha adicionarLinkCredencialUserSenha;
+	@Autowired
+	private AdicionadorLinkCredencialCodigoDeBarra adicionarLinkCredencialCodigoDeBarra;
 	
 	@GetMapping("/buscar-credencial-user-senha")
 	public ResponseEntity<?> buscarCredenciaisUsuariosSenhas(){
 		List<CredencialUsuarioSenha> credenciais = repositorioCredencialUsuarioSenha.findAll();
-		if(credenciais.size() > 0) {
+		if(!credenciais.isEmpty()) {
+			adicionarLinkCredencialUserSenha.adicionarLink(credenciais);
+			for(CredencialUsuarioSenha credencial: credenciais) {
+				adicionarLinkCredencialUserSenha.adicionarLinkUpdate(credencial);
+				adicionarLinkCredencialUserSenha.adicionarLinkDelete(credencial);
+			}
 			return new ResponseEntity<List<CredencialUsuarioSenha>>(credenciais, HttpStatus.FOUND);
 		}else {
 			return new ResponseEntity<String>("Nenhuma credencial encontrada...", HttpStatus.NOT_FOUND);
@@ -51,6 +62,9 @@ public class CredencialControle {
 		if(credencial == null) {
 			return new ResponseEntity<String>("credencial não encontrada...", HttpStatus.NOT_FOUND);
 		}else {
+			adicionarLinkCredencialUserSenha.adicionarLink(credencial);
+			adicionarLinkCredencialUserSenha.adicionarLinkUpdate(credencial);
+			adicionarLinkCredencialUserSenha.adicionarLinkDelete(credencial);
 			return new ResponseEntity<CredencialUsuarioSenha>(credencial, HttpStatus.FOUND);
 		}
 	}
@@ -67,6 +81,9 @@ public class CredencialControle {
 		if(credencial == null) {
 			return new ResponseEntity<String>("credencial não encontrada...", HttpStatus.NOT_FOUND);
 		}else {
+			adicionarLinkCredencialUserSenha.adicionarLink(credencial);
+			adicionarLinkCredencialUserSenha.adicionarLinkUpdate(credencial);
+			adicionarLinkCredencialUserSenha.adicionarLinkDelete(credencial);
 			return new ResponseEntity<CredencialUsuarioSenha>(credencial, HttpStatus.FOUND);
 		}
 	}
@@ -143,6 +160,11 @@ public class CredencialControle {
 	@GetMapping("/buscar-codigo-barra")
 	public ResponseEntity<?> buscarCredenciaisCodigoBarras(){
 		List<CredencialCodigoBarra> credenciais = repositorioCredencialCodigoBarra.findAll();
+		adicionarLinkCredencialCodigoDeBarra.adicionarLink(credenciais);
+		for(CredencialCodigoBarra credencial: credenciais) {
+			adicionarLinkCredencialCodigoDeBarra.adicionarLinkUpdate(credencial);
+			adicionarLinkCredencialCodigoDeBarra.adicionarLinkDelete(credencial);
+		}
 		return new ResponseEntity<List<CredencialCodigoBarra>>(credenciais, HttpStatus.FOUND);
 	}
 
@@ -152,6 +174,9 @@ public class CredencialControle {
 		if(credencial == null) {
 			return new ResponseEntity<String>("credencial não encontrada...", HttpStatus.NOT_FOUND);
 		}else {
+			adicionarLinkCredencialCodigoDeBarra.adicionarLink(credencial);
+			adicionarLinkCredencialCodigoDeBarra.adicionarLinkUpdate(credencial);
+			adicionarLinkCredencialCodigoDeBarra.adicionarLinkDelete(credencial);
 			return new ResponseEntity<CredencialCodigoBarra>(credencial, HttpStatus.FOUND);
 		}
 	}

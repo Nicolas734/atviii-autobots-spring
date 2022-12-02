@@ -98,7 +98,7 @@ public class VendaControle {
 			Set<Long> idsServicos = dados.getIdServicos();
 			
 			if(dados.getIdMercadorias() != null) {
-				if(dados.getIdMercadorias().size() > 0) {	
+				if(!dados.getIdMercadorias().isEmpty()) {	
 					for (Long id : idsMercadorias) {
 						Mercadoria respostaBuscar = repositorioMercadoria.getById(id);
 						Mercadoria mercadoria = new Mercadoria();
@@ -115,8 +115,8 @@ public class VendaControle {
 				}
 			}
 
-			if(dados.getIdMercadorias() != null) {	
-				if(dados.getIdServicos().size() > 0) {				
+			if(dados.getIdServicos() != null) {	
+				if(!dados.getIdServicos().isEmpty()) {				
 					for (Long id : idsServicos) {
 						Servico respostaBusca = repositorioServico.getById(id);
 						Servico servico = new Servico();

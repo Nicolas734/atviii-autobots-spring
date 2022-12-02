@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -75,8 +76,8 @@ public class MercadoriaControle {
 	
 	@PostMapping("/cadastrar/{idEmpresa}")
 	public ResponseEntity<Empresa> cadastrarMercadoriaEmpresa(@RequestBody Mercadoria dados, @PathVariable Long idEmpresa){
-		dados.setOriginal(true);
 		Empresa empresa = repositorioEmpresa.findById(idEmpresa).orElse(null);
+		dados.setOriginal(true);
 		dados.setCadastro(new Date());
 		HttpStatus status = null;
 		if(empresa == null) {
@@ -92,6 +93,25 @@ public class MercadoriaControle {
 			status = HttpStatus.CREATED;
 		}
 		return new ResponseEntity<Empresa>(empresa,status);
+	}
+	
+	@PostMapping("/cadastrar-mercadoria-fornecedor/{idUsuarioFornecedor}")
+	public ResponseEntity<?> cadastrarMercadoriaFornecedor(@RequestBody Mercadoria dados, @PathVariable Long idUsuarioFornecedor){
+		Usuario usuario = repositorioUsuario.findById(idUsuarioFornecedor).orElse(null);
+		dados.setOriginal(true);
+		dados.setCadastro(new Date());
+		if(usuario == null) {
+			return new ResponseEntity<>("Usuario não encontrado...",HttpStatus.NOT_FOUND);
+		}else {
+			usuario.getMercadorias().add(dados);
+			repositorioUsuario.save(usuario);
+			for(Mercadoria mercadoria: usuario.getMercadorias()) {
+				adicionarLink.adicionarLink(mercadoria);
+				adicionarLink.adicionarLinkUpdate(mercadoria);
+				adicionarLink.adicionarLinkDelete(mercadoria);
+			}
+			return new ResponseEntity<>(usuario,HttpStatus.CREATED);
+		}
 	}
 	
 	@PutMapping("/atualizar/{idMercadoria}")
