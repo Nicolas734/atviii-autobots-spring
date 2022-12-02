@@ -42,6 +42,6 @@ Endereco				Ok
 Mercadoria				Ok					
 Servico					Ok			
 Telefone				Ok					
-Usuario					
-Veiculo					
+Usuario					Ok
+Veiculo					Ok				
 Venda						

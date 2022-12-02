@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.entidades.Veiculo;
 import com.autobots.automanager.entidades.Venda;
+import com.autobots.automanager.modelos.AdicionadorLinkVeiculo;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
 import com.autobots.automanager.repositorios.RepositorioVeiculo;
 import com.autobots.automanager.repositorios.RepositorioVenda;
@@ -31,10 +32,19 @@ public class VeiculoControle {
 	private RepositorioUsuario repositorioUsuario;
 	@Autowired
 	private RepositorioVenda repositorioVenda;
+	@Autowired
+	private AdicionadorLinkVeiculo adicionarLink;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Veiculo>> buscarVeiculos(){
 		List<Veiculo> veiculos = repositorio.findAll();
+		adicionarLink.adicionarLink(veiculos);
+		if(!veiculos.isEmpty()) {
+			for(Veiculo veiculo: veiculos) {
+				adicionarLink.adicionarLinkUpdate(veiculo);
+				adicionarLink.adicionarLinkDelete(veiculo);
+			}
+		}
 		return new ResponseEntity<List<Veiculo>>(veiculos,HttpStatus.FOUND);
 	}
 	
@@ -45,6 +55,9 @@ public class VeiculoControle {
 		if(veiculo == null) {
 			status = HttpStatus.NOT_FOUND;
 		}else {
+			adicionarLink.adicionarLink(veiculo);
+			adicionarLink.adicionarLinkUpdate(veiculo);
+			adicionarLink.adicionarLinkDelete(veiculo);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Veiculo>(veiculo,status);
@@ -60,6 +73,11 @@ public class VeiculoControle {
 			dados.setProprietario(usuario);
 			usuario.getVeiculos().add(dados);
 			repositorioUsuario.save(usuario);
+			for(Veiculo veiculo: usuario.getVeiculos()) {
+				adicionarLink.adicionarLink(veiculo);
+				adicionarLink.adicionarLinkUpdate(veiculo);
+				adicionarLink.adicionarLinkDelete(veiculo);
+			}
 			status = HttpStatus.CREATED;
 		}
 		return new ResponseEntity<Usuario>(usuario,status);

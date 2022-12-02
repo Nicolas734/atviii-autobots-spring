@@ -25,6 +25,7 @@ import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.entidades.Veiculo;
 import com.autobots.automanager.entidades.Venda;
 import com.autobots.automanager.enumeracoes.PerfilUsuario;
+import com.autobots.automanager.modelos.AdicionadorLinkUsuario;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
 import com.autobots.automanager.repositorios.RepositorioVeiculo;
@@ -42,10 +43,19 @@ public class UsuarioControle {
 	private RepositorioVenda repositorioVenda;
 	@Autowired
 	private RepositorioVeiculo repositorioVeiculo;
+	@Autowired
+	private AdicionadorLinkUsuario adicionarLink;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Usuario>> buscarUsuarios(){
 		List<Usuario> usuarios = repositorio.findAll();
+		adicionarLink.adicionarLink(usuarios);
+		if(!usuarios.isEmpty()) {
+			for(Usuario usuario: usuarios) {
+				adicionarLink.adicionarLinkUpdate(usuario);
+				adicionarLink.adicionarLinkDelete(usuario);
+			}
+		}
 		return new ResponseEntity<List<Usuario>>(usuarios,HttpStatus.FOUND);
 	}
 	
@@ -56,6 +66,9 @@ public class UsuarioControle {
 		if(usuario == null) {
 			status = HttpStatus.NOT_FOUND;
 		}else {
+			adicionarLink.adicionarLink(usuario);
+			adicionarLink.adicionarLinkUpdate(usuario);
+			adicionarLink.adicionarLinkDelete(usuario);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Usuario>(usuario,status);
@@ -65,6 +78,9 @@ public class UsuarioControle {
 	public ResponseEntity<Usuario> cadastrarUsuarioCliente(@RequestBody Usuario dados){
 		dados.getPerfis().add(PerfilUsuario.CLIENTE);
 		Usuario usuario = repositorio.save(dados);
+		adicionarLink.adicionarLink(usuario);
+		adicionarLink.adicionarLinkUpdate(usuario);
+		adicionarLink.adicionarLinkDelete(usuario);
 		return new ResponseEntity<Usuario>(usuario,HttpStatus.CREATED);
 	}
 	
@@ -77,6 +93,11 @@ public class UsuarioControle {
 		}else {
 			empresa.getUsuarios().add(dados);
 			repositorioEmpresa.save(empresa);
+			for(Usuario usuario: empresa.getUsuarios()) {
+				adicionarLink.adicionarLink(usuario);
+				adicionarLink.adicionarLinkUpdate(usuario);
+				adicionarLink.adicionarLinkDelete(usuario);
+			}
 			return new ResponseEntity<Empresa>(empresa, HttpStatus.CREATED);
 		}
 	}
@@ -85,6 +106,9 @@ public class UsuarioControle {
 	public ResponseEntity<Usuario> cadastrarUsuarioFornecedor(@RequestBody Usuario dados){
 		dados.getPerfis().add(PerfilUsuario.FORNECEDOR);
 		Usuario usuario = repositorio.save(dados);
+		adicionarLink.adicionarLink(usuario);
+		adicionarLink.adicionarLinkUpdate(usuario);
+		adicionarLink.adicionarLinkDelete(usuario);
 		return new ResponseEntity<Usuario>(usuario,HttpStatus.CREATED);
 	}
 	
@@ -108,7 +132,7 @@ public class UsuarioControle {
 	}
 	
 	@DeleteMapping("/excluir/{idUsuario}")
-	public ResponseEntity<?> excluirCliente(@PathVariable Long idUsuario){
+	public ResponseEntity<?> excluirUsuario(@PathVariable Long idUsuario){
 		Usuario verificacao = repositorio.findById(idUsuario).orElse(null);
 		if(verificacao == null) {
 			return new ResponseEntity<String>("Usuario não encontrado...",HttpStatus.NOT_FOUND);
